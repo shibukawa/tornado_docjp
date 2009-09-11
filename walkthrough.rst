@@ -619,6 +619,6 @@ Tornadoの認証モジュールは、いくつかのメジャーなWebサービ�
               return
           # set_secure_cookie() などを使用してユーザを保存します。
 
-See the auth module documentation for more details.
+.. See the auth module documentation for more details.
 
 更に詳しい情報は、認証モジュール（auth module)のドキュメントを参照してください。
