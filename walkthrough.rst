@@ -12,9 +12,13 @@ Tornadoウォークスルー
    tornado.web.RequestHandler. Those classes define get() or post() methods 
    to handle HTTP GET or POST requests to that URL.
 
+Tornadoウェブアプリケーションでは、URLあるいはURLパターンを :class:`tornado.web.RequestHandler` のサブクラスにマップします。これらのクラスではリクエストされたURLへのHTTP GET/POSTリクエストを処理する :meth:`get()` / :meth:`post()` メソッドを定義する必要があります。
+
 .. This code maps the root URL / to MainHandler and the URL pattern 
    /story/([0-9]+) to StoryHandler. Regular expression groups are passed as 
    arguments to the RequestHandler methods:
+
+下記のコードではルートURL ``/`` を :class:`MainHandler` に、URLパターン ``/story/([0-9]+)`` を :class:`StoryHandler` にマップしています。正規表現化された箇所は :meth:`RequestHandler` メソッドに引数として渡されます。
 
 .. code-block:: python
 
@@ -34,6 +38,8 @@ Tornadoウォークスルー
 .. You can get query string arguments and parse POST bodies with the 
    get_argument() method:
 
+:meth:`get_argument()` メソッドによってクエリ文字列引数の受け取りとPOSTの本体のパースを行うことができます。
+
 .. code-block:: python
 
   class MainHandler(tornado.web.RequestHandler):
@@ -50,6 +56,9 @@ Tornadoウォークスルー
 .. If you want to send an error response to the client, e.g., 
    403 Unauthorized, you can just raise a tornado.web.HTTPError exception:
 
+
+:exc:`tornado.web.HTTPError` 例外を投げると、クライアントに403 Unauthorizedのようなエラーレスポンスを返すことができます。
+
 .. code-block:: python
 
   if not self.user_is_logged_in():
@@ -59,13 +68,22 @@ Tornadoウォークスルー
    request with self.request. The HTTPRequest object includes a number 
    of useful attribute, including:
 
+リクエストハンドラは現在のリクエストを表すオブジェクトの :attr:`self.request` でアクセス可能です。 :class:`HTTPRequest` オブジェクトは多くの便利な属性があります。
+
 .. * arguments - all of the GET and POST arguments
 .. * files - all of the uploaded files (via multipart/form-data POST requests)
 .. * path - the request path (everything before the ?)
 .. * headers - the request headers
 
+* :data:`arguments` - すべてのGETとPOSTの引数
+* :data:`files` - すべてのアップロードされたファイル（multipart/form-data POSTリクエスト経由）
+* :data:`path` - リクエストパス（?以前すべて）
+* :data:`headers` - リクエストヘッダ
+
 .. See the class definition for HTTPRequest in httpserver for a complete 
    list of attributes.
+
+:mod:`httpserver` 内にあるHTTPRequestのクラス定義を参照すると、すべての属性を見ることができます。
 
 .. Templates
 
@@ -162,7 +180,9 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
 クッキーと、安全なクッキー
 --------------------------
 
-You can set cookies in the user's browser with the set_cookie method:
+.. You can set cookies in the user's browser with the set_cookie method:
+
+ユーザのブラウザにクッキーを残したい場合は :meth:`set_cookie()` メソッドを用います:
 
 .. code-block:: python
 
@@ -174,8 +194,15 @@ You can set cookies in the user's browser with the set_cookie method:
           else:
               self.write("Your cookie was set!")
 
-Cookies are easily forged by malicious clients. If you need to set cookies to, e.g., save the user ID of the currently logged in user, you need to sign your cookies to prevent forgery. Tornado supports this out of the box with the set_secure_cookie and get_secure_cookie methods. To use these methods, you need to specify a secret key named cookie_secret when you create your application. You can pass in application settings as keyword arguments to your application:
+.. Cookies are easily forged by malicious clients. If you need to set 
+   cookies to, e.g., save the user ID of the currently logged in user, 
+   you need to sign your cookies to prevent forgery. Tornado supports 
+   this out of the box with the set_secure_cookie and get_secure_cookie 
+   methods. To use these methods, you need to specify a secret key named 
+   cookie_secret when you create your application. You can pass in 
+   application settings as keyword arguments to your application:
 
+クッキーは悪意のあるクライアントによって容易に偽装されてしまいます。例えば現在ログインしているユーザのユーザIDを保存するためにクッキーをセットしたい場合は、偽造を防ぐためにあなたのクッキーを署名する必要があります。Tornadoではインストール直後でも :meth:`set_secure_cookie()` と :meth:`get_secure_cookie()` メソッドを用いることでこれを実現できます。これらのメソッドを用いるにはアプリケーションを構築する際に :data:`cookie_secret` という秘密鍵を指定する必要があります。これはアプリケーション設定内でキーワード引数としてアプリケーションに渡すことができます。
 
 .. code-block:: python
 
@@ -183,7 +210,12 @@ Cookies are easily forged by malicious clients. If you need to set cookies to, e
       (r"/", MainHandler),
   ], cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=")
 
-Signed cookies contain the encoded value of the cookie in addition to a timestamp and an HMAC signature. If the cookie is old or if the signature doesn't match, get_secure_cookie will return None just as if the cookie isn't set. The secure version of the example above:
+.. Signed cookies contain the encoded value of the cookie in addition to a 
+   timestamp and an HMAC signature. If the cookie is old or if the signature 
+   doesn't match, get_secure_cookie will return None just as if the cookie 
+   isn't set. The secure version of the example above:
+
+署名済みクッキーにはタイムスタンプと `HMAC署名 <http://en.wikipedia.org/wiki/HMAC>`_(`日本語 <http://ja.wikipedia.org/wiki/HMAC>`_) に加えてクッキーのエンコードされた値が含まれています。もしクッキーが古いあるいは署名が適合しなければ、 :meth:`get_secure_cookie()` メソッドがあたかもクッキーがセットされていないかのように ``None`` を返します。上記の例を安全なクッキーとして設定する場合は以下のようなコードになります。
 
 .. code-block:: python
 
@@ -200,9 +232,19 @@ Signed cookies contain the encoded value of the cookie in addition to a timestam
 ユーザ認証
 ----------
 
-The currently authenticated user is available in every request handler as self.current_user, and in every template as current_user. By default, current_user is None.
+.. The currently authenticated user is available in every request handler as 
+   self.current_user, and in every template as current_user. By default, 
+   current_user is None.
 
-To implement user authentication in your application, you need to override the get_current_user() method in your request handlers to determine the current user based on, e.g., the value of a cookie. Here is an example that lets users log into the application simply by specifying a nickname, which is then saved in a cookie:
+認証済みのユーザは、リクエストハンドラ内では  :attr:`self.current_user` として、テンプレート内では :data:`current_user` としてそれぞれ利用することができます。デフォルトでは :attr:`current_user` は ``None`` です。
+
+.. To implement user authentication in your application, you need to override 
+   the get_current_user() method in your request handlers to determine the 
+   current user based on, e.g., the value of a cookie. Here is an example 
+   that lets users log into the application simply by specifying a nickname, 
+   which is then saved in a cookie:
+
+アプリケーション内でユーザ認証を実装するには、例えばクッキーの値をもとにユーザを断定するには、リクエストハンドラ内で :meth:`get_current_user()` メソッドをオーバーライドする必要があります。下記の例では、ユーザがクッキー内に記録されているニックネームを用いてアプリケーションにログインする方法を示してします。
 
 .. code-block:: python
 
@@ -236,6 +278,8 @@ To implement user authentication in your application, you need to override the g
 
 You can require that the user be logged in using the Python decorator tornado.web.authenticated. If a request goes to a method with this decorator, and the user is not logged in, they will be redirected to login_url (another application setting). The example above could be rewritten:
 
+`Pythonデコレータ <http://www.python.org/dev/peps/pep-0318/>` の :func:`tornado.web.authenticated` を用いてログイン済みユーザのリクエストのみを処理するコードを書くことができます。もしリクエストがこのデコレータが付いたメソッドまで達したときにユーザがログインしていなかったら、リクエストは ``login_url`` にリダイレクトされます。（``login_url`` は別途アプリケーション設定を行います）上記サンプルは以下のように書き換えることができます:
+
 .. code-block:: python
 
   class MainHandler(BaseHandler):
@@ -254,20 +298,41 @@ You can require that the user be logged in using the Python decorator tornado.we
       (r"/login", LoginHandler),
   ], **settings)
 
-If you decorate post() methods with the authenticated decorator, and the user is not logged in, the server will send a 403 response.
+.. If you decorate post() methods with the authenticated decorator, and the 
+   user is not logged in, the server will send a 403 response.
 
-Tornado comes with built-in support for third-party authentication schemes like Google OAuth. See the auth module for more details. Check out the Tornado Blog example application for a complete example that uses authentication (and stores user data in a MySQL database).
+もし :meth:`post()` メソッドが :func:`authenticated` デコレータ付きで実装されていて、ユーザがログインしていなかった場合、サーバは ``403`` レスポンスを返します。
+
+
+.. Tornado comes with built-in support for third-party authentication 
+   schemes like Google OAuth. See the auth module for more details. 
+   Check out the Tornado Blog example application for a complete 
+   example that uses authentication (and stores user data in a MySQL database).
+
+TornadoはGoogle OAuthのようなサードパーティの認証方式もビルトインサポートしています。詳細は `auth module <http://github.com/facebook/tornado/blob/master/tornado/auth.py>` を参照して下さい。ユーザ認証を用いたアプリケーションの例を確認したい場合はTornadoブログをご覧ください。（なおMySQLにユーザデータを保存する例も記載されています。）
 
 .. Cross-site request forgery protection
 
-クロスサイトリクエストフォージェリの防衛
-----------------------------------------
+クロスサイトリクエストフォージェリからの保護
+--------------------------------------------
 
-Cross-site request forgery, or XSRF, is a common problem for personalized web applications. See the Wikipedia article for more information on how XSRF works.
+.. Cross-site request forgery, or XSRF, is a common problem for personalized 
+   web applications. See the Wikipedia article for more information on how 
+   XSRF works.
 
-The generally accepted solution to prevent XSRF is to cookie every user with an unpredictable value and include that value as an additional argument with every form submission on your site. If the cookie and the value in the form submission do not match, then the request is likely forged.
+`クロスサイトリクエストフォージェリ（XSRF) <http://en.wikipedia.org/wiki/Cross-site_request_forgery>`_ (`日本語 <http://ja.wikipedia.org/wiki/クロスサイトリクエストフォージェリ>`_)は、ウェブアプリケーションにおける一般的な問題です。XSRFがどの様な悪さをするのかは、Wikipediaの当該ページを参照してください。
 
-Tornado comes with built-in XSRF protection. To include it in your site, include the application setting xsrf_cookies:
+.. The generally accepted solution to prevent XSRF is to cookie every user 
+   with an unpredictable value and include that value as an additional 
+   argument with every form submission on your site. If the cookie and the 
+   value in the form submission do not match, then the request is likely forged.
+
+一般的なXSRFに対する防衛策としては、ユーザ毎に予測できない値をクッキーとして格納し、ウェブサイトへのフォームの送信ごとにその値を追加の引数として入れるということが行われます。もしクッキーの値と、送信されたフォームの値が異なったら、そのリクエストはニセ者であるとみなします。
+
+.. Tornado comes with built-in XSRF protection. To include it in your site, 
+   include the application setting xsrf_cookies:
+
+Tornadoは、XSRFプロテクション機能を持っています。アプリケーション設定内で :data:`xsrf_cookies` を有効にする事であなたのサイトでXSRFプロテクションを利用する事ができます:
 
 .. code-block:: python
 
@@ -282,7 +347,13 @@ Tornado comes with built-in XSRF protection. To include it in your site, include
       (r"/login", LoginHandler),
   ], **settings)
 
-If xsrf_cookies is set, the Tornado web application will set the _xsrf cookie for all users and reject all POST requests hat do not contain a correct _xsrf value. If you turn this setting on, you need to instrument all forms that submit via POST to contain this field. You can do this with the special function xsrf_form_html(), available in all templates:
+.. If xsrf_cookies is set, the Tornado web application will set the _xsrf 
+   cookie for all users and reject all POST requests hat do not contain a 
+   correct _xsrf value. If you turn this setting on, you need to instrument 
+   all forms that submit via POST to contain this field. You can do this with 
+   the special function xsrf_form_html(), available in all templates:
+
+:data:`xsrf_cookies` が設定されていると、Tornadoウェブアプリケーションは、 :data:`_xsrf` クッキーをすべてのユーザにセットします。 そして、正式な :data:`_xsrf` クッキーを持たないすべてのPOSTリクエストを拒否します。 もし、この設定を有効にした場合には、すべてのformのsubmit操作時に :data:`_xsrf` 値を付加する必要があります。 :func:`xsrf_from_html()` をテンプレート内のフォームに適用する事で、 :data:`_xsrf` 値を付加する事ができます:
 
 .. code-block:: html
 
@@ -293,7 +364,12 @@ If xsrf_cookies is set, the Tornado web application will set the _xsrf cookie fo
     <div><input type="submit" value="Sign in"/></div>
   </form>
 
-If you submit AJAX POST requests, you will also need to instrument your JavaScript to include the _xsrf value with each request. This is the jQuery function we use at FriendFeed for AJAX POST requests that automatically adds the _xsrf value to all requests:
+.. If you submit AJAX POST requests, you will also need to instrument your 
+   JavaScript to include the _xsrf value with each request. This is the 
+   jQuery function we use at FriendFeed for AJAX POST requests that 
+   automatically adds the _xsrf value to all requests:
+
+もし、AJAXのPOSTリクエストを行う場合には、リクエスト毎に :data:`_xsrf` 値をJavascriptで埋め込む必要があります。 FriendFeedで使用している `jQuery <http://jquery.com/>`_ を利用して自動で_xsrf値を付加するサンプルを以下に示します:
 
 .. code-block:: javascript
 
@@ -315,7 +391,10 @@ If you submit AJAX POST requests, you will also need to instrument your JavaScri
 静的ファイルと動的ファイルのキャッシュ
 --------------------------------------
 
-You can serve static files from Tornado by specifying the static_path setting in your application:
+.. You can serve static files from Tornado by specifying the static_path 
+   setting in your application:
+
+Tornadoで静的ファイルを提供するにはアプリケーション設定で :data:`static_path` を指定する必要があります:
 
 .. code-block:: python
 
@@ -331,11 +410,17 @@ You can serve static files from Tornado by specifying the static_path setting in
     (r"/login", LoginHandler),
   ], **settings)
 
-This setting will automatically make all requests that start with /static/ serve from that static directory, e.g., http://localhost:8888/static/foo.png will serve the file foo.png from the specified static directory. We also automatically serve /robots.txt and /favicon.ico from the static directory (even though they don't start with the /static/ prefix).
+.. This setting will automatically make all requests that start with /static/ serve from that static directory, e.g., http://localhost:8888/static/foo.png will serve the file foo.png from the specified static directory. We also automatically serve /robots.txt and /favicon.ico from the static directory (even though they don't start with the /static/ prefix).
 
-To improve performance, it is generally a good idea for browsers to cache static resources aggressively so browsers won't send unnecessary If-Modified-Since or Etag requests that might block the rendering of the page. Tornado supports this out of the box with static content versioning.
+この設定では ``/static/`` で始まるすべてのリクエストを自動的に静的なディレクトリからの'serve'とすることができます。例えば ``http://localhost:8888/static/foo.png <http://localhost:8888/static/foo.png>`` というURLの場合は :file:`foo.png` というファイルを指定された静的ディレクトリから提供します。また ``/robots.txt`` や ``/favicon.ico`` も静的ディレクトリから自動的に配信されます。（たとえURLが ``/static`` から始まらなくても）
 
-To use this feature, use the static_url() method in your templates rather than typing the URL of the static file directly in your HTML:
+.. To improve performance, it is generally a good idea for browsers to cache static resources aggressively so browsers won't send unnecessary If-Modified-Since or Etag requests that might block the rendering of the page. Tornado supports this out of the box with static content versioning.
+
+パフォーマンス向上の定石として、静的リソースをブラウザが積極的にキャッシュするという一般的な方法があります。これによってブラウザはページのレンダリングを妨げる不必要な ``If-Modified-Since`` や ``Etag`` リクエストを送信しなくなります。
+
+.. To use this feature, use the static_url() method in your templates rather than typing the URL of the static file directly in your HTML:
+
+この機能を利用するには、テンプレートの中で静的ファイルのURLをHTML内で直接記述するのではなく :meth:`static_url()`メソッドを使用します。
 
 .. code-block:: html
 
@@ -348,11 +433,17 @@ To use this feature, use the static_url() method in your templates rather than t
      </body>
    </html>
 
-The static_url() function will translate that relative path to a URI that looks like /static/images/logo.png?v=aae54. The v argument is a hash of the content in logo.png, and its presence makes the Tornado server send cache headers to the user's browser that will make the browser cache the content indefinitely.
+.. The static_url() function will translate that relative path to a URI that looks like /static/images/logo.png?v=aae54. The v argument is a hash of the content in logo.png, and its presence makes the Tornado server send cache headers to the user's browser that will make the browser cache the content indefinitely.
 
-Since the v argument is based on the content of the file, if you update a file and restart your server, it will start sending a new v value, so the user's browser will automatically fetch the new file. If the file's contents don't change, the browser will continue to use a locally cached copy without ever checking for updates on the server, significantly improving rendering performance.
+:meth:`static_url()` メソッドは相対パスを ``/static/images/logo.png?v=aae54`` というようなURIに変換します。 :data:`v` という引数は :file:`logo.png` というファイルの中身に対するハッシュであり、この引数によりTornadoサーバはユーザのブラウザがコンテンツを区別してキャッシュするようにキャッシュヘッダを送信します。
 
-In production, you probably want to serve static files from a more optimized static file server like nginx. You can configure most any web server to support these caching semantics. Here is the nginx configuration we use at FriendFeed:
+.. Since the v argument is based on the content of the file, if you update a file and restart your server, it will start sending a new v value, so the user's browser will automatically fetch the new file. If the file's contents don't change, the browser will continue to use a locally cached copy without ever checking for updates on the server, significantly improving rendering performance.
+
+:data:`v` 引数はファイルの中身に基づいているため、もしファイルをアップデートしてサーバを再起動したら、Tornadoサーバは新しい値を持った ``v`` を送信します。これによって、ユーザのブラウザは自動的に新しいファイルを取得します。もしファイルの中身が変わっていなければ、ブラウザはサーバ上のファイルが更新されたか確認することなく、ローカルにキャッシュされたファイルのコピーを使用します。これによりレンダリングのパフォーマンスは劇的に改善されます。
+
+.. In production, you probably want to serve static files from a more optimized static file server like nginx. You can configure most any web server to support these caching semantics. Here is the nginx configuration we use at FriendFeed:
+
+アプリケーション公開時には `nginx <http://nginx.net/>` のような、より最適化されたファイルサーバから静的ファイルを配信したくなるでしょう。たいていのウェブサーバではこのようなキャッシュ動作をサポートしています。たとえばFriendFeedで行っているnginxの設定は下記のようになります:
 
 .. code-block:: text
 
@@ -472,9 +563,13 @@ CSVファイルのフォーマットや他の他言語化の方法について�
 ユーザインタフェースモジュール
 ------------------------------
 
-Tornado supports UI modules to make it easy to support standard, reusable UI widgets across your application. UI modules are like special functional calls to render components of your page, and they can come packaged with their own CSS and JavaScript.
+.. Tornado supports UI modules to make it easy to support standard, reusable UI widgets across your application. UI modules are like special functional calls to render components of your page, and they can come packaged with their own CSS and JavaScript.
 
-For example, if you are implementing a blog, and you want to have blog entries appear on both the blog home page and on each blog entry page, you can make an Entry module to render them on both pages. First, create a Python module for your UI modules, e.g., uimodules.py:
+Tornadoではアプリケーション全体で標準的で再利用可能なユーザインタフェースウィジットユーザインタフェースモジュールを簡単に利用しやすくするために、ユーザインタフェースモジュールを提供しています。ユーザインタフェースモジュールはウェブページ内のコンポーネントをレンダリングするための特別な関数呼び出しのようなもので、それぞれ独自のCSSとJavaScriptとともに提供されます。
+
+.. For example, if you are implementing a blog, and you want to have blog entries appear on both the blog home page and on each blog entry page, you can make an Entry module to render them on both pages. First, create a Python module for your UI modules, e.g., uimodules.py:
+
+たとえばあなたがブログを実装しているとして、ブログエントリがブログのホームページとそれぞれのエントリページの両方に表示されるようにしたいときに、 :mod`Entry` モジュールを両方のページをレンダリングするように実装することができます。まず、あなたのユーザインタフェースモジュールに :file:`uimodules.py` のようなPythonモジュールを作成します:
 
 .. code-block:: python
 
@@ -483,7 +578,9 @@ For example, if you are implementing a blog, and you want to have blog entries a
           return self.render_string(
               "module-entry.html", show_comments=show_comments)
 
-Tell Tornado to use uimodules.py using the ui_modules setting in your application:
+.. Tell Tornado to use uimodules.py using the ui_modules setting in your application:
+
+Tornadoにアプリケーションで ``ui_modules`` という設定を使っている ``uimodules.py`` を利用するよう明記します:
 
 .. code-block:: python
 
@@ -507,7 +604,10 @@ Tell Tornado to use uimodules.py using the ui_modules setting in your applicatio
       (r"/entry/([0-9]+)", EntryHandler),
   ], **settings)
 
-Within home.html, you reference the Entry module rather than printing the HTML directly:
+.. Within home.html, you reference the Entry module rather than printing the HTML directly:
+
+:file:`home.html` の中でHTMLを直接記述するのではなく、 :mod:`Entry` モジュールを参照します。
+
 
 .. code-block:: django
 
@@ -515,13 +615,17 @@ Within home.html, you reference the Entry module rather than printing the HTML d
     {{ modules.Entry(entry) }}
   {% end %}
 
-Within entry.html, you reference the Entry module with the show_comments argument to show the expanded form of the entry:
+.. Within entry.html, you reference the Entry module with the show_comments argument to show the expanded form of the entry:
+
+:file:`entry.html` の中でエントリの拡張されたフォームが表示されるように  :mod:`Entry` モジュールを ``show_comments`` 引数とともに参照します。
 
 .. code-block:: django
 
   {{ modules.Entry(entry, show_comments=True) }}
 
-Modules can include custom CSS and JavaScript functions by overriding the embedded_css, embedded_javascript, javascript_file, or css_file methods:
+.. Modules can include custom CSS and JavaScript functions by overriding the embedded_css, embedded_javascript, javascript_file, or css_file methods:
+
+モジュールでは :meth:`embedded_css()`, :meth:`embedded_javascript()`, :meth:`javascript_file()`, :meth:`css_file()`メソッドを各々オーバライドすることによりカスタムのCSSとJavaScriptを取り込むことができます:
 
 .. code-block:: python
 
@@ -533,16 +637,22 @@ Modules can include custom CSS and JavaScript functions by overriding the embedd
           return self.render_string(
               "module-entry.html", show_comments=show_comments)
 
-Module CSS and JavaScript will be included once no matter how many times a module is used on a page. CSS is always included in the <head> of the page, and JavaScript is always included just before the </body> tag at the end of the page.
+.. Module CSS and JavaScript will be included once no matter how many times a module is used on a page. CSS is always included in the <head> of the page, and JavaScript is always included just before the </body> tag at the end of the page.
+
+ ``CSS``モジュール と ``JavaSctipt`` モジュールは1ページに何回読み込まれたとしても1度だけ読み込まれます。 ``CSS`` は常にページの ``<head>`` タグ内に含まれ、 ``JavaScript`` は常にページの最後の ``</body>`` タグの直前に含まれます。
 
 .. Non-blocking, asynchronous requests
 
 ノンブロッキング, 非同期リクエスト
 ----------------------------------
 
-When a request handler is executed, the request is automatically finished. Since Tornado uses a non-blocking I/O style, you can override this default behavior if you want a request to remain open after the main request handler method returns using the tornado.web.asynchronous decorator.
+.. When a request handler is executed, the request is automatically finished. Since Tornado uses a non-blocking I/O style, you can override this default behavior if you want a request to remain open after the main request handler method returns using the tornado.web.asynchronous decorator.
 
-When you use this decorator, it is your responsibility to call self.finish() to finish the HTTP request, or the user's browser will simply hang:
+リクエストハンドラが実行されたとき、リクエストは自動的に終了します。TornadoはノンブロッキングI/Oスタイルを使用するため、もしメインリクエストハンドラメソッドが値を返したあとに、リクエストを開けたままにしたい場合は :func:`tornado.web.asynchronous` デコレータを用いてデフォルトの振舞いをオーバーライドすることができます。
+
+.. When you use this decorator, it is your responsibility to call self.finish() to finish the HTTP request, or the user's browser will simply hang:
+
+このデコレータを用いる場合は、HTTPリクエストを終了する場合は ``self.finish()`` メソッドをきちんと呼んであげなければいけません。そうしないとユーザのブラウザがハングしてしまいます:
 
 .. code-block:: python
 
@@ -552,7 +662,9 @@ When you use this decorator, it is your responsibility to call self.finish() to 
           self.write("Hello, world")
           self.finish()
 
-Here is a real example that makes a call to the FriendFeed API using Tornado's built-in asynchronous HTTP client:
+.. Here is a real example that makes a call to the FriendFeed API using Tornado's built-in asynchronous HTTP client:
+
+ここでTornadoのビルトイン非同期HTTPクライアントを用いてFriendFeed APIを呼び出す実際の例をご紹介します:
 
 .. code-block:: python
 
@@ -570,20 +682,37 @@ Here is a real example that makes a call to the FriendFeed API using Tornado's b
                      "from the FriendFeed API")
           self.finish()
 
-When get() returns, the request has not finished. When the HTTP client eventually calls on_response(), the request is still open, and the response is finally flushed to the client with the call to self.finish().
+.. When get() returns, the request has not finished. When the HTTP client eventually calls on_response(), the request is still open, and the response is finally flushed to the client with the call to self.finish().
 
-If you make calls to asynchronous library functions that require a callback (like the HTTP fetch function above), you should always wrap your callbacks with self.async_callback. This simple wrapper ensures that if your callback function raises an exception or has a programming error, a proper HTTP error response will be sent to the browser, and the connection will be properly closed.
+:meth:`get()` メソッドが値を戻しても、リクエストは終わっていません。いずれまたHTTPクライアントが :meth:`on_response()` メソッドを呼び出し、リクエストがまだ開いていたとき、レスポンスは最終的には :meth:`self.finish()` を呼び出すことでクライアントにフラッシュされます。
 
-For a more advanced asynchronous example, take a look at the chat example application, which implements an AJAX chat room using long polling.
+.. If you make calls to asynchronous library functions that require a callback (like the HTTP fetch function above), you should always wrap your callbacks with self.async_callback. This simple wrapper ensures that if your callback function raises an exception or has a programming error, a proper HTTP error response will be sent to the browser, and the connection will be properly closed.
+
+もしコールバックを要求するような非同期ライブラリ関数を呼び出す場合は、コールバックを ``self.async_callback`` で常にラップすべきです。（例えば上の例でのHTTPフェッチ関数のような場合です）このシンプルなラッパーを用いることによって、コールバック関数が例外を発生させた場合あるいはプログラミングエラーがあった場合に、適切なHTTPエラーレスポンスがブラウザに送信され、コネクションが適切に閉じられることが確実になります。
+
+.. For a more advanced asynchronous example, take a look at the chat example application, which implements an AJAX chat room using long polling.
+
+さらに上級的な例を参考したい場合は、ロングポーリングを用いてAJAXのチャットルームを実装した例を見てください。
 
 .. Third party authentication
 
 サードパーティ認証
 ------------------
 
-Tornado's auth module implements the authentication and authorization protocols for a number of the most popular sites on the web, including Google/Gmail, Facebook, Twitter, Yahoo, and FriendFeed. The module includes methods to log users in via these sites and, where applicable, methods to authorize access to the service so you can, e.g., download a user's address book or publish a Twitter message on their behalf.
+.. Tornado's auth module implements the authentication and authorization 
+   protocols for a number of the most popular sites on the web, including 
+   Google/Gmail, Facebook, Twitter, Yahoo, and FriendFeed. The module 
+   includes methods to log users in via these sites and, where applicable, 
+   methods to authorize access to the service so you can, e.g., download 
+   a user's address book or publish a Twitter message on their behalf.
 
-Here is an example handler that uses Google for authentication, saving the Google credentials in a cookie for later access:
+Tornadoの認証モジュールは、いくつかのメジャーなWebサービスの認証と承認に対応しています。サービスは、Google/Gmail、Facebook、Twitter、Yahoo、FriendFeedが利用出来ます。このモジュールを使う事で、これらのサイトに、認証済みのアクセスを出来ます。例えばあなたのアドレスブックに載っている友達のTwitterのメッセージをダウンロードすることができます。
+
+
+.. Here is an example handler that uses Google for authentication, 
+   saving the Google credentials in a cookie for later access:
+
+参考にグーグルの認証を使用したサンプルを紹介します。 このサンプルは、継続的なアクセスを行うために、グーグルの認証済みクッキーを保存します:
 
 .. code-block:: python
 
@@ -599,7 +728,8 @@ Here is an example handler that uses Google for authentication, saving the Googl
           if not user:
               self.authenticate_redirect()
               return
-          # Save the user with, e.g., set_secure_cookie()
+          # set_secure_cookie() などを使用してユーザを保存します。
 
-See the auth module documentation for more details.
+.. See the auth module documentation for more details.
 
+更に詳しい情報は、認証モジュール（auth module)のドキュメントを参照してください。
