@@ -12,9 +12,13 @@ Tornadoウォークスルー
    tornado.web.RequestHandler. Those classes define get() or post() methods 
    to handle HTTP GET or POST requests to that URL.
 
+Tornadoウェブアプリケーションでは、URLあるいはURLパターンを :class:`tornado.web.RequestHandler` のサブクラスにマップします。これらのクラスではリクエストされたURLへのHTTP GET/POSTリクエストを処理する :meth:`get()` / :meth:`post()` メソッドを定義する必要があります。
+
 .. This code maps the root URL / to MainHandler and the URL pattern 
    /story/([0-9]+) to StoryHandler. Regular expression groups are passed as 
    arguments to the RequestHandler methods:
+
+下記のコードではルートURL ``/`` を :class:`MainHandler` に、URLパターン ``/story/([0-9]+)`` を :class:`StoryHandler` にマップしています。正規表現化された箇所は :meth:`RequestHandler` メソッドに引数として渡されます。
 
 .. code-block:: python
 
@@ -34,6 +38,8 @@ Tornadoウォークスルー
 .. You can get query string arguments and parse POST bodies with the 
    get_argument() method:
 
+:meth:`get_argument()` メソッドによってクエリ文字列引数の受け取りとPOSTの本体のパースを行うことができます。
+
 .. code-block:: python
 
   class MainHandler(tornado.web.RequestHandler):
@@ -50,6 +56,9 @@ Tornadoウォークスルー
 .. If you want to send an error response to the client, e.g., 
    403 Unauthorized, you can just raise a tornado.web.HTTPError exception:
 
+
+:exc:`tornado.web.HTTPError` 例外を投げると、クライアントに403 Unauthorizedのようなエラーレスポンスを返すことができます。
+
 .. code-block:: python
 
   if not self.user_is_logged_in():
@@ -59,13 +68,22 @@ Tornadoウォークスルー
    request with self.request. The HTTPRequest object includes a number 
    of useful attribute, including:
 
+リクエストハンドラは現在のリクエストを表すオブジェクトの :attr:`self.request` でアクセス可能です。 :class:`HTTPRequest` オブジェクトは多くの便利な属性があります。
+
 .. * arguments - all of the GET and POST arguments
 .. * files - all of the uploaded files (via multipart/form-data POST requests)
 .. * path - the request path (everything before the ?)
 .. * headers - the request headers
 
+* :data:`arguments` - すべてのGETとPOSTの引数
+* :data:`files` - すべてのアップロードされたファイル（multipart/form-data POSTリクエスト経由）
+* :data:`path` - リクエストパス（?以前すべて）
+* :data:`headers` - リクエストヘッダ
+
 .. See the class definition for HTTPRequest in httpserver for a complete 
    list of attributes.
+
+:mod:`httpserver` 内にあるHTTPRequestのクラス定義を参照すると、すべての属性を見ることができます。
 
 .. Templates
 
@@ -547,9 +565,19 @@ For a more advanced asynchronous example, take a look at the chat example applic
 サードパーティ認証
 ------------------
 
-Tornado's auth module implements the authentication and authorization protocols for a number of the most popular sites on the web, including Google/Gmail, Facebook, Twitter, Yahoo, and FriendFeed. The module includes methods to log users in via these sites and, where applicable, methods to authorize access to the service so you can, e.g., download a user's address book or publish a Twitter message on their behalf.
+.. Tornado's auth module implements the authentication and authorization 
+   protocols for a number of the most popular sites on the web, including 
+   Google/Gmail, Facebook, Twitter, Yahoo, and FriendFeed. The module 
+   includes methods to log users in via these sites and, where applicable, 
+   methods to authorize access to the service so you can, e.g., download 
+   a user's address book or publish a Twitter message on their behalf.
 
-Here is an example handler that uses Google for authentication, saving the Google credentials in a cookie for later access:
+Tornadoの認証モジュールは、いくつかのメジャーなWebサービスの認証と承認に対応しています。利用可能なサービスには、Google/Gmail、Facebook、Twitter、Yahoo、FriendFeedが利用出来ます。このモジュールは含まれます。例えば、ユーザのアドレスブックかをダウンロードします。
+
+.. Here is an example handler that uses Google for authentication, 
+   saving the Google credentials in a cookie for later access:
+
+参考にグーグルの認証を使用したサンプルを紹介します。 このサンプルは、継続的なアクセスを行うために、グーグルの認証済みクッキーを保存します:
 
 .. code-block:: python
 
@@ -565,7 +593,8 @@ Here is an example handler that uses Google for authentication, saving the Googl
           if not user:
               self.authenticate_redirect()
               return
-          # Save the user with, e.g., set_secure_cookie()
+          # set_secure_cookie() などを使用してユーザを保存します。
 
 See the auth module documentation for more details.
 
+更に詳しい情報は、認証モジュール（auth module)のドキュメントを参照してください。

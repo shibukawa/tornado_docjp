@@ -49,11 +49,13 @@ Apacheベンチマーク(ab)を使用して、コマンドごとにそれぞれ�
 本番環境でTornadoを実行する
 ============================
 
-At FriendFeed, we use nginx as a load balancer and static file server. We run multiple instances of the Tornado web server on multiple frontend machines. We typically run one Tornado frontend per core on the machine (sometimes more depending on utilization).
+.. At FriendFeed, we use nginx as a load balancer and static file server. We run multiple instances of the Tornado web server on multiple frontend machines. We typically run one Tornado frontend per core on the machine (sometimes more depending on utilization).
 
 FriendFeedでは、 `nginx <http://nginx.net/>`_ をロードバランサーおよび静的ファイルのサーバとして使用しています。 FriendFeedでは複数のフロントエンドマシン上で、いくつかのTornadoウェブサーバのインスタンスを起動しています。私たちが通常Tornadoフロントエンドを実行するのは、マシンのコア数と同数にしています。
 
-This is a barebones nginx config file that is structurally similar to the one we use at FriendFeed. It assumes nginx and the Tornado servers are running on the same machine, and the four Tornado servers are running on ports 8000 - 8003:
+.. This is a barebones nginx config file that is structurally similar to the one we use at FriendFeed. It assumes nginx and the Tornado servers are running on the same machine, and the four Tornado servers are running on ports 8000 - 8003:
+
+以下のファイルは、FriendFeedで使用されているのと、同じ構造を持つnginxの設定ファイルのひな形です。以下の設定ファイルは、nginxとTornadoサーバが同じマシン上にあり、4つのTornadoサーバが8000〜8003の4つのポートで動作することを想定しています。
 
 .. code-block:: text
 
@@ -69,7 +71,7 @@ This is a barebones nginx config file that is structurally similar to the one we
   }
 
   http {
-      # Enumerate all the Tornado servers here
+      # すべてのTornadoサーバはここに列挙します
       upstream frontends {
           server 127.0.0.1:8000;
           server 127.0.0.1:8001;
@@ -94,15 +96,15 @@ This is a barebones nginx config file that is structurally similar to the one we
                  application/x-javascript application/xml
                  application/atom+xml text/javascript;
 
-      # Only retry if there was a communication error, not a timeout
-      # on the Tornado server (to avoid propagating "queries of death"
-      # to all frontends)
+      # コミュニケーションエラーがあったときだけリトライします。
+      # Tornadoサーバのタイムアウトではリトライしません。
+      # すべてのフロントエンドの"queries of death"が広がるのを避けるための措置です。
       proxy_next_upstream error;
 
       server {
           listen 80;
 
-          # Allow file uploads
+          # ファイルのアップロードを許可します
           client_max_body_size 50M;
 
           location ^~ /static/ {
@@ -129,16 +131,36 @@ This is a barebones nginx config file that is structurally similar to the one we
       }
   }
 
+..    # Only retry if there was a communication error, not a timeout
+      # on the Tornado server (to avoid propagating "queries of death"
+      # to all frontends)
+
+      # Allow file uploads
+
 .. WSGI and Google AppEngine
 
 WSGIとGoogle AppEngine
 =======================
 
-Tornado comes with limited support for WSGI. However, since WSGI does not support non-blocking requests, you cannot use any of the asynchronous/non-blocking features of Tornado in your application if you choose to use WSGI instead of Tornado's HTTP server. Some of the features that are not available in WSGI applications: @tornado.web.asynchronous, the httpclient module, and the auth module.
+.. Tornado comes with limited support for WSGI. However, since WSGI does 
+   not support non-blocking requests, you cannot use any of the 
+   asynchronous/non-blocking features of Tornado in your application 
+   if you choose to use WSGI instead of Tornado's HTTP server. Some of 
+   the features that are not available in WSGI applications: 
+   @tornado.web.asynchronous, the httpclient module, and the auth module.
 
-You can create a valid WSGI application from your Tornado request handlers by using WSGIApplication in the wsgi module instead of using tornado.web.Application. Here is an example that uses the built-in WSGI CGIHandler to make a valid Google AppEngine application:
 
-.. code-block:: python
+
+Tornadoは、限定的に `WSGI <http://wsgi.org/>`_ をサポートしています。 しかし、WSGIではノンブロッキングのリクエストをサポートしていないため、TornadoのHTTPサーバではなくWSGIを使用することを選択してしまうと、Tornadoの非同期、ノンブロッキングの機能をアプリケーションで利用することはできなくなります。 :func:`@tornado.web.asynchronous`, :mod:`httpclient` モジュール, :mod:`auth` モジュールといったいくつかの機能は、WSGIアプリケーションでは利用できません。
+
+.. You can create a valid WSGI application from your Tornado request handlers 
+   by using WSGIApplication in the wsgi module instead of using 
+   tornado.web.Application. Here is an example that uses the built-in 
+   WSGI CGIHandler to make a valid Google AppEngine application:
+
+
+
+.. Code-block:: python
 
   import tornado.web
   import tornado.wsgi
