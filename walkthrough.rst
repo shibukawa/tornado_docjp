@@ -215,7 +215,7 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
    doesn't match, get_secure_cookie will return None just as if the cookie 
    isn't set. The secure version of the example above:
 
-署名済みクッキーにはタイムスタンプと `HMAC署名 <http://en.wikipedia.org/wiki/HMAC>`_(`日本語 <http://ja.wikipedia.org/wiki/HMAC>`_) に加えてクッキーのエンコードされた値が含まれています。もしクッキーが古いあるいは署名が適合しなければ、 :meth:`get_secure_cookie()` メソッドがあたかもクッキーがセットされていないかのように ``None`` を返します。上記の例を安全なクッキーとして設定する場合は以下のようなコードになります。
+署名済みクッキーにはタイムスタンプと\ `HMAC署名 <http://en.wikipedia.org/wiki/HMAC>`_\ (\ `日本語 <http://ja.wikipedia.org/wiki/HMAC>`_\ )に加えてクッキーのエンコードされた値が含まれています。もしクッキーが古いあるいは署名が適合しなければ、\ :meth:`get_secure_cookie()`\ メソッドがあたかもクッキーがセットされていないかのように ``None`` を返します。上記の例を安全なクッキーとして設定する場合は以下のようなコードになります。
 
 .. code-block:: python
 
@@ -309,7 +309,7 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
    Check out the Tornado Blog example application for a complete 
    example that uses authentication (and stores user data in a MySQL database).
 
-TornadoはGoogle OAuthのようなサードパーティの認証方式もビルトインサポートしています。詳細は `auth module <http://github.com/facebook/tornado/blob/master/tornado/auth.py>` を参照して下さい。ユーザ認証を用いたアプリケーションの例を確認したい場合はTornadoブログをご覧ください。（なおMySQLにユーザデータを保存する例も記載されています。）
+TornadoはGoogle OAuthのようなサードパーティの認証方式もビルトインサポートしています。詳細は\ `auth module <http://github.com/facebook/tornado/blob/master/tornado/auth.py>`_\ を参照して下さい。ユーザ認証を用いたアプリケーションの例を確認したい場合はTornadoブログをご覧ください。（なおMySQLにユーザデータを保存する例も記載されています。）
 
 .. Cross-site request forgery protection
 
@@ -412,7 +412,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. This setting will automatically make all requests that start with /static/ serve from that static directory, e.g., http://localhost:8888/static/foo.png will serve the file foo.png from the specified static directory. We also automatically serve /robots.txt and /favicon.ico from the static directory (even though they don't start with the /static/ prefix).
 
-この設定では ``/static/`` で始まるすべてのリクエストを自動的に静的なディレクトリからの'serve'とすることができます。例えば ``http://localhost:8888/static/foo.png <http://localhost:8888/static/foo.png>`` というURLの場合は :file:`foo.png` というファイルを指定された静的ディレクトリから提供します。また ``/robots.txt`` や ``/favicon.ico`` も静的ディレクトリから自動的に配信されます。（たとえURLが ``/static`` から始まらなくても）
+この設定では ``/static/`` で始まるすべてのリクエストを自動的に静的なディレクトリからの'serve'とすることができます。例えば ``http://localhost:8888/static/foo.png`` というURLの場合は :file:`foo.png` というファイルを指定された静的ディレクトリから提供します。また ``/robots.txt`` や ``/favicon.ico`` も静的ディレクトリから自動的に配信されます。（たとえURLが ``/static`` から始まらなくても）
 
 .. To improve performance, it is generally a good idea for browsers to cache static resources aggressively so browsers won't send unnecessary If-Modified-Since or Etag requests that might block the rendering of the page. Tornado supports this out of the box with static content versioning.
 
@@ -443,7 +443,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. In production, you probably want to serve static files from a more optimized static file server like nginx. You can configure most any web server to support these caching semantics. Here is the nginx configuration we use at FriendFeed:
 
-アプリケーション公開時には `nginx <http://nginx.net/>` のような、より最適化されたファイルサーバから静的ファイルを配信したくなるでしょう。たいていのウェブサーバではこのようなキャッシュ動作をサポートしています。たとえばFriendFeedで行っているnginxの設定は下記のようになります:
+アプリケーション公開時には `nginx <http://nginx.net/>`_ のような、より最適化されたファイルサーバから静的ファイルを配信したくなるでしょう。たいていのウェブサーバではこのようなキャッシュ動作をサポートしています。たとえばFriendFeedで行っているnginxの設定は下記のようになります:
 
 .. code-block:: text
 
