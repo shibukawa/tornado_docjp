@@ -388,7 +388,7 @@ Tornadoは、XSRFプロテクション機能を持っています。アプリケ
 
 .. Static files and aggressive file caching
 
-静的ファイルと動的ファイルのキャッシュ
+静的ファイルと積極的なファイルキャッシュ
 --------------------------------------
 
 .. You can serve static files from Tornado by specifying the static_path 
@@ -564,7 +564,7 @@ CSVファイルのフォーマットや他の他言語化の方法について�
 
 .. Tornado supports UI modules to make it easy to support standard, reusable UI widgets across your application. UI modules are like special functional calls to render components of your page, and they can come packaged with their own CSS and JavaScript.
 
-Tornadoではアプリケーション全体で標準的で再利用可能なユーザインタフェースウィジットユーザインタフェースモジュールを簡単に利用しやすくするために、ユーザインタフェースモジュールを提供しています。ユーザインタフェースモジュールはウェブページ内のコンポーネントをレンダリングするための特別な関数呼び出しのようなもので、それぞれ独自のCSSとJavaScriptとともに提供されます。
+Tornadoではアプリケーション全体で標準的で再利用可能なユーザインタフェースモジュールを簡単に利用しやすくするために、ユーザインタフェースモジュールを提供しています。ユーザインタフェースモジュールはウェブページ内のコンポーネントをレンダリングするための特別な関数呼び出しのようなもので、それぞれ独自のCSSとJavaScriptとともに提供されます。
 
 .. For example, if you are implementing a blog, and you want to have blog entries appear on both the blog home page and on each blog entry page, you can make an Entry module to render them on both pages. First, create a Python module for your UI modules, e.g., uimodules.py:
 

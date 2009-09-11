@@ -48,7 +48,7 @@ Tornadoは `Facebookのオープンソース技術 <http://developers.facebook.c
 翻訳は以下のメンバーが行っています。
 
 * 渋川
-* 山口
+* 山口 (ymotongpoo)
 * a2c
 * nishio
 
