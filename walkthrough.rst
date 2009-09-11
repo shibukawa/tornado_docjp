@@ -568,7 +568,7 @@ Tornadoではアプリケーション全体で標準的で再利用可能なユ�
 
 .. For example, if you are implementing a blog, and you want to have blog entries appear on both the blog home page and on each blog entry page, you can make an Entry module to render them on both pages. First, create a Python module for your UI modules, e.g., uimodules.py:
 
-たとえばあなたがブログを実装しているとして、ブログエントリがブログのホームページとそれぞれのエントリページの両方に表示されるようにしたいときに、 :mod`Entry` モジュールを両方のページをレンダリングするように実装することができます。まず、あなたのユーザインタフェースモジュールに :file:`uimodules.py` のようなPythonモジュールを作成します:
+たとえばあなたがブログを実装しているとして、ブログエントリがブログのホームページとそれぞれのエントリページの両方に表示されるようにしたいときに、 :mod:`Entry` モジュールを両方のページをレンダリングするように実装することができます。まず、あなたのユーザインタフェースモジュールに :file:`uimodules.py` のようなPythonモジュールを作成します:
 
 .. code-block:: python
 
