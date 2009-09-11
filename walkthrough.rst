@@ -278,14 +278,26 @@ Tornado comes with built-in support for third-party authentication schemes like 
 
 .. Cross-site request forgery protection
 
-クロスサイトリクエストフォージェリの防衛
-----------------------------------------
+クロスサイトリクエストフォージェリからの保護
+--------------------------------------------
 
-Cross-site request forgery, or XSRF, is a common problem for personalized web applications. See the Wikipedia article for more information on how XSRF works.
+.. Cross-site request forgery, or XSRF, is a common problem for personalized 
+   web applications. See the Wikipedia article for more information on how 
+   XSRF works.
 
-The generally accepted solution to prevent XSRF is to cookie every user with an unpredictable value and include that value as an additional argument with every form submission on your site. If the cookie and the value in the form submission do not match, then the request is likely forged.
+`クロスサイトリクエストフォージェリ（XSRF) <http://en.wikipedia.org/wiki/Cross-site_request_forgery>`_ (`日本語 <http://ja.wikipedia.org/wiki/クロスサイトリクエストフォージェリ>`_)は、ウェブアプリケーションにおける一般的な問題です。XSRFがどの様な悪さをするのかは、Wikipediaの当該ページを参照してください。
 
-Tornado comes with built-in XSRF protection. To include it in your site, include the application setting xsrf_cookies:
+.. The generally accepted solution to prevent XSRF is to cookie every user 
+   with an unpredictable value and include that value as an additional 
+   argument with every form submission on your site. If the cookie and the 
+   value in the form submission do not match, then the request is likely forged.
+
+一般的なXSRFに対する防衛策としては、ユーザ毎に予測できない値をクッキーとして格納し、ウェブサイトへのフォームの送信ごとにその値を追加の引数として入れるということが行われます。もしクッキーの値と、送信されたフォームの値が異なったら、そのリクエストはニセ者であるとみなします。
+
+.. Tornado comes with built-in XSRF protection. To include it in your site, 
+   include the application setting xsrf_cookies:
+
+Tornadoは、XSRFプロテクション機能を持っています。アプリケーション設定内で :data:`xsrf_cookies` を有効にする事であなたのサイトでXSRFプロテクションを利用する事ができます:
 
 .. code-block:: python
 
@@ -300,7 +312,13 @@ Tornado comes with built-in XSRF protection. To include it in your site, include
       (r"/login", LoginHandler),
   ], **settings)
 
-If xsrf_cookies is set, the Tornado web application will set the _xsrf cookie for all users and reject all POST requests hat do not contain a correct _xsrf value. If you turn this setting on, you need to instrument all forms that submit via POST to contain this field. You can do this with the special function xsrf_form_html(), available in all templates:
+.. If xsrf_cookies is set, the Tornado web application will set the _xsrf 
+   cookie for all users and reject all POST requests hat do not contain a 
+   correct _xsrf value. If you turn this setting on, you need to instrument 
+   all forms that submit via POST to contain this field. You can do this with 
+   the special function xsrf_form_html(), available in all templates:
+
+:data:`xsrf_cookies` が設定されていると、Tornadoウェブアプリケーションは、 :data:`_xsrf` クッキーをすべてのユーザにセットします。 そして、正式な :data:`_xsrf` クッキーを持たないすべてのPOSTリクエストを拒否します。 もし、この設定を有効にした場合には、すべてのformのsubmit操作時に :data:`_xsrf` 値を付加する必要があります。 :func:`xsrf_from_html()` をテンプレート内のフォームに適用する事で、 :data:`_xsrf` 値を付加する事ができます:
 
 .. code-block:: html
 
@@ -311,7 +329,12 @@ If xsrf_cookies is set, the Tornado web application will set the _xsrf cookie fo
     <div><input type="submit" value="Sign in"/></div>
   </form>
 
-If you submit AJAX POST requests, you will also need to instrument your JavaScript to include the _xsrf value with each request. This is the jQuery function we use at FriendFeed for AJAX POST requests that automatically adds the _xsrf value to all requests:
+.. If you submit AJAX POST requests, you will also need to instrument your 
+   JavaScript to include the _xsrf value with each request. This is the 
+   jQuery function we use at FriendFeed for AJAX POST requests that 
+   automatically adds the _xsrf value to all requests:
+
+もし、AJAXのPOSTリクエストを行う場合には、リクエスト毎に :data:`_xsrf` 値をJavascriptで埋め込む必要があります。 FriendFeedで使用している `jQuery <http://jquery.com/>`_ を利用して自動で_xsrf値を付加するサンプルを以下に示します:
 
 .. code-block:: javascript
 
@@ -572,7 +595,8 @@ For a more advanced asynchronous example, take a look at the chat example applic
    methods to authorize access to the service so you can, e.g., download 
    a user's address book or publish a Twitter message on their behalf.
 
-Tornadoの認証モジュールは、いくつかのメジャーなWebサービスの認証と承認に対応しています。利用可能なサービスには、Google/Gmail、Facebook、Twitter、Yahoo、FriendFeedが利用出来ます。このモジュールは含まれます。例えば、ユーザのアドレスブックかをダウンロードします。
+Tornadoの認証モジュールは、いくつかのメジャーなWebサービスの認証と承認に対応しています。サービスは、Google/Gmail、Facebook、Twitter、Yahoo、FriendFeedが利用出来ます。このモジュールを使う事で、これらのサイトに、認証済みのアクセスを出来ます。例えばあなたのアドレスブックに載っている友達のTwitterのメッセージをダウンロードすることができます。
+
 
 .. Here is an example handler that uses Google for authentication, 
    saving the Google credentials in a cookie for later access:
