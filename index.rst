@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. image:: tornado.png
+
 Tornadoドキュメント翻訳
 ===================================
 
@@ -48,4 +50,5 @@ Tornadoは `Facebookのオープンソース技術 <http://developers.facebook.c
 * 渋川
 * 山口
 * a2c
+* nishio
 
