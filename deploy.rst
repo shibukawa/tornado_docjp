@@ -46,6 +46,8 @@ Apacheベンチマーク(ab)を使用して、コマンドごとにそれぞれ�
 
 .. Running Tornado in production
 
+.. _running_tornado_in_production:
+
 本番環境でTornadoを実行する
 ============================
 
@@ -158,9 +160,9 @@ Tornadoは、限定的に `WSGI <http://wsgi.org/>`_ をサポートしていま
    tornado.web.Application. Here is an example that uses the built-in 
    WSGI CGIHandler to make a valid Google AppEngine application:
 
+通常Tornadoアプリケーションを作成するときにリクエストハンドラとして使用する、 :class:`tornado.web.Application` の代わりに、 :mod:`wsgi: モジュールの :class:`WSGIApplication` を使用すると有効なWSGIアプリケーションを作成することができます。以下のコードはPython組み込みのWSGIの :class:`CGIHandler` を使用するサンプルです。以下のコードは `Google AppEngine <http://code.google.com/appengine/>`_ のアプリケーションとして使用することができます:
 
-
-.. Code-block:: python
+.. code-block:: python
 
   import tornado.web
   import tornado.wsgi
@@ -176,13 +178,20 @@ Tornadoは、限定的に `WSGI <http://wsgi.org/>`_ をサポートしていま
       ])
       wsgiref.handlers.CGIHandler().run(application)
 
-See the appengine example application for a full-featured AppEngine app built on Tornado.
+.. See the appengine example application for a full-featured AppEngine app built on Tornado.
+
+完全な機能を備えたAppEngineのTornadoアプリケーションについては、 :file:`appengine` のサンプルを参照してください。
 
 .. Caveats and support
 
 警告とサポート
 ==============
 
-Tornado was refactored from the FriendFeed code base to reduce dependencies. This refactoring may have introduced bugs. Likewise, because the FriendFeed servers have always run behind nginx, Tornado has not been extensively tested with HTTP/1.1 clients beyond Firefox. Tornado currently does not attempt to handle multi-line headers and some types of malformed input.
+.. Tornado was refactored from the FriendFeed code base to reduce dependencies. This refactoring may have introduced bugs. Likewise, because the FriendFeed servers have always run behind nginx, Tornado has not been extensively tested with HTTP/1.1 clients beyond Firefox. Tornado currently does not attempt to handle multi-line headers and some types of malformed input.
 
-You can discuss Tornado and report bugs on the Tornado developer mailing list.
+Tornadoは,  `FriendFeed <http://friendfeed.com/>`_ のコードをベースに、依存関係を減らすようにリファクタリングされたものです。このリファクタリングによってバグが混入された可能性があります。同様にFriendFeedのサーバはかならず :ref:`nginxを立てて <running_tornado_in_production>` 運用していたため、 Tornadoは Firefoxの HTTP/1.1クライアントでテストした以外は、十分にテストしてません。Tornadoは現在は複数行にわたるヘッダや、異常な入力扱うのを好みません。
+
+.. You can discuss Tornado and report bugs on the Tornado developer mailing list.
+
+Tornadoについての議論や、バグの報告は `Tornadoの開発者メーリングリスト <http://groups.google.com/group/python-tornado>`_ 上でお願いします。
+
