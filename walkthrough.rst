@@ -276,9 +276,9 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
       (r"/login", LoginHandler),
   ], cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=")
 
-You can require that the user be logged in using the Python decorator tornado.web.authenticated. If a request goes to a method with this decorator, and the user is not logged in, they will be redirected to login_url (another application setting). The example above could be rewritten:
+.. You can require that the user be logged in using the Python decorator tornado.web.authenticated. If a request goes to a method with this decorator, and the user is not logged in, they will be redirected to login_url (another application setting). The example above could be rewritten:
 
-`Pythonデコレータ <http://www.python.org/dev/peps/pep-0318/>` の :func:`tornado.web.authenticated` を用いてログイン済みユーザのリクエストのみを処理するコードを書くことができます。もしリクエストがこのデコレータが付いたメソッドまで達したときにユーザがログインしていなかったら、リクエストは ``login_url`` にリダイレクトされます。（``login_url`` は別途アプリケーション設定を行います）上記サンプルは以下のように書き換えることができます:
+`Pythonデコレータ <http://www.python.org/dev/peps/pep-0318/>`_\ の\ :func:`tornado.web.authenticated`\ を用いてログイン済みユーザのリクエストのみを処理するコードを書くことができます。もしリクエストがこのデコレータが付いたメソッドまで達したときにユーザがログインしていなかったら、リクエストは[ ``login_url``\ にリダイレクトされます。（\ ``login_url``\ は別途アプリケーション設定を行います）上記サンプルは以下のように書き換えることができます:
 
 .. code-block:: python
 
@@ -301,7 +301,7 @@ You can require that the user be logged in using the Python decorator tornado.we
 .. If you decorate post() methods with the authenticated decorator, and the 
    user is not logged in, the server will send a 403 response.
 
-もし :meth:`post()` メソッドが :func:`authenticated` デコレータ付きで実装されていて、ユーザがログインしていなかった場合、サーバは ``403`` レスポンスを返します。
+もし\ :meth:`post()`\ メソッドが\ :func:`authenticated`\ デコレータ付きで実装されていて、ユーザがログインしていなかった場合、サーバは\ ``403``\ レスポンスを返します。
 
 
 .. Tornado comes with built-in support for third-party authentication 
@@ -420,7 +420,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. To use this feature, use the static_url() method in your templates rather than typing the URL of the static file directly in your HTML:
 
-この機能を利用するには、テンプレートの中で静的ファイルのURLをHTML内で直接記述するのではなく :meth:`static_url()`メソッドを使用します。
+この機能を利用するには、テンプレートの中で静的ファイルのURLをHTML内で直接記述するのではなく :meth:`static_url()` メソッドを使用します。
 
 .. code-block:: html
 
@@ -461,15 +461,15 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. The locale of the current user (whether they are logged in or not) is always available as self.locale in the request handler and as locale in templates.
 
-ユーザのロケールは、ユーザがログインしているかどうかに関わらず、リクエストハンドラの``self.locale``やテンプレートの``locale``で取得できます。
+ユーザのロケールは、ユーザがログインしているかどうかに関わらず、リクエストハンドラの :attr:`self.locale` やテンプレートの :data:`locale` で取得できます。
 
 ..  The name of the locale (e.g., en_US) is available as locale.name, and you can translate strings with the locale.translate method. 
 
-ロケールの名前(en_USなど)は``locale.name``で取得できます。
+ロケールの名前(en_USなど)は :attr:`locale.name` で取得できます。
 
 .. Templates also have the global function call _() available for string translation. The translate function has two forms:
 
-テンプレート内ではグローバル関数``_()``を翻訳に使うことができます。この関数は2通りの使い方があります:
+テンプレート内ではグローバル関数 :func:`_()` を翻訳に使うことができます。この関数は2通りの使い方があります:
 
 .. code-block:: python
 
@@ -490,15 +490,15 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. In the example above, a translation of the first string will be returned if len(people) is 1, or a translation of the second string will be returned otherwise.
 
-上記の例では``len(people)``が1の時には最初の文字列が返され、それ以外の場合には二番目の文字列が返されます。
+上記の例では ``len(people)`` が1の時には最初の文字列が返され、それ以外の場合には二番目の文字列が返されます。
 
 .. The most common pattern for translations is to use Python named placeholders for variables (the %(num)d in the example above) since placeholders can move around on translation.
 
-翻訳文で変数を使う場合はPythonの名前付きプレースホルダー(上記の例では``%(num)d``)を使うのが一般的です。
-これはプレースホルダーを翻訳文の好きな位置に置けるようにするためです。
+翻訳文で変数を使う場合はPythonの名前付きプレースホルダー(上記の例では ``%(num)d``)を使うのが一般的です。これはプレースホルダーを翻訳文の好きな位置に置けるようにするためです。
 
 .. Here is a properly localized template:
-適切に他言語化されたテンプレートの例を下に示します:
+
+適切に多言語化されたテンプレートの例を下に示します:
 
 .. code-block:: html
 
@@ -518,7 +518,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. By default, we detect the user's locale using the Accept-Language header sent by the user's browser. We choose en_US if we can't find an appropriate Accept-Language value. If you let user's set their locale as a preference, you can override this default locale selection by overriding get_user_locale in your request handler:
 
-デフォルトでは、ユーザのブラウザが送るAccept-Languageヘッダの値をユーザのロケールを判断します。適切な値のAccept-Languageヘッダが見つからない場合はen_USを使います。ユーザにロケールを設定させる場合は、リクエストハンドラの``get_user_locale``メソッドをオーバーライドすることでこの挙動を上書きできます。
+デフォルトでは、ユーザのブラウザが送る ``Accept-Language`` ヘッダの値をユーザのロケールを判断します。適切な値の ``Accept-Language`` ヘッダが見つからない場合は ``en_US`` を使います。ユーザにロケールを設定させる場合は、リクエストハンドラの :meth:`get_user_locale` メソッドをオーバーライドすることでこの挙動を上書きすることができます。
 
 .. code-block:: python
 
@@ -536,11 +536,11 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. If get_user_locale returns None, we fall back on the Accept-Language header.
 
-``get_user_locale``メソッドの返り値がNoneの場合には、Accept-Languageヘッダの値に基づいてロケールを決定します。
+:meth:`get_user_locale` メソッドの返り値がNoneの場合には、 ``Accept-Language`` ヘッダの値に基づいてロケールを決定します。
 
 .. You can load all the translations for your application using the tornado.locale.load_translations method. It takes in the name of the directory which should contain CSV files named after the locales whose translations they contain, e.g., es_GT.csv or fr_CA.csv. The method loads all the translations from those CSV files and infers the list of supported locales based on the presence of each CSV file. You typically call this method once in the main() method of your server:
 
-``tornado.locale.load_translations``メソッドで、すべての翻訳ファイルをロードすることができます。このメソッドは翻訳ファイルが入っているディレクトリ名を引数に取ります。翻訳ファイルはロケールの名前に基づいた名前(例: es_GT.csv, fr_CA.csv)のCSVファイルです。このメソッドはCVSファイルから翻訳文をロードし、各CVSファイルの有無を元にどのロケールがサポートされているかを決定します。通常はこのメソッドはmain()メソッドの中で一度だけ呼びます。
+:meth:`tornado.locale.load_translations` メソッドで、すべての翻訳ファイルをロードすることができます。このメソッドは翻訳ファイルが入っているディレクトリ名を引数に取ります。翻訳ファイルはロケールの名前に基づいた名前(例: :file:`es_GT.csv`, :file:`fr_CA.csv`)のCSVファイルです。このメソッドはCVSファイルから翻訳文をロードし、各CVSファイルの有無を元にどのロケールがサポートされているかを決定します。通常はこのメソッドは :meth:`main()` メソッドの中で一度だけ呼びます。
 
 .. code-block:: python
 
@@ -551,12 +551,11 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. You can get the list of supported locales in your application with tornado.locale.get_supported_locales(). The user's locale is chosen to be the closest match based on the supported locales. For example, if the user's locale is es_GT, and the es locale is supported, self.locale will be es for that request. We fall back on en_US if no close match can be found.
 
-サポートされているロケールの一覧は``tornado.locale.get_supported_locales()``で取得できます。ユーザのロケールは、サポートされているロケールの中で最も近いものが選ばれます。例えばユーザのロケールがes_GTで、esロケールがサポートされている場合、そのリクエストのself.localeはesになります。近い名前が見つからない場合はen_USになります。
+サポートされているロケールの一覧は :meth:`tornado.locale.get_supported_locales()` で取得できます。ユーザのロケールは、サポートされているロケールの中で最も近いものが選ばれます。例えばユーザのロケールが ``es_GT`` で、 ``es`` ロケールがサポートされている場合、そのリクエストの :attr:`self.locale` は ``es`` になります。近い名前が見つからない場合は ``en_US`` になります。
 
 .. See the locale module documentation for detailed information on the CSV format and other localization methods.
 
-CSVファイルのフォーマットや他の他言語化の方法についての詳細は``locale``モジュールのドキュメントを参照してください。
-
+CSVファイルのフォーマットや他の他言語化の方法についての詳細は `localeモジュール <http://github.com/facebook/tornado/blob/master/tornado/locale.py>`_ のドキュメントを参照してください。
 
 .. UI modules
 
@@ -625,7 +624,7 @@ Tornadoにアプリケーションで ``ui_modules`` という設定を使って
 
 .. Modules can include custom CSS and JavaScript functions by overriding the embedded_css, embedded_javascript, javascript_file, or css_file methods:
 
-モジュールでは :meth:`embedded_css()`, :meth:`embedded_javascript()`, :meth:`javascript_file()`, :meth:`css_file()`メソッドを各々オーバライドすることによりカスタムのCSSとJavaScriptを取り込むことができます:
+モジュールでは :meth:`embedded_css()`, :meth:`embedded_javascript()`, :meth:`javascript_file()`, :meth:`css_file()` メソッドを各々オーバライドすることによりカスタムのCSSとJavaScriptを取り込むことができます:
 
 .. code-block:: python
 
