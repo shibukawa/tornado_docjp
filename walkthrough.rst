@@ -368,23 +368,46 @@ In production, you probably want to serve static files from a more optimized sta
 多言語化
 --------
 
-The locale of the current user (whether they are logged in or not) is always available as self.locale in the request handler and as locale in templates. The name of the locale (e.g., en_US) is available as locale.name, and you can translate strings with the locale.translate method. Templates also have the global function call _() available for string translation. The translate function has two forms:
+.. The locale of the current user (whether they are logged in or not) is always available as self.locale in the request handler and as locale in templates.
+
+ユーザのロケールは、ユーザがログインしているかどうかに関わらず、リクエストハンドラの``self.locale``やテンプレートの``locale``で取得できます。
+
+..  The name of the locale (e.g., en_US) is available as locale.name, and you can translate strings with the locale.translate method. 
+
+ロケールの名前(en_USなど)は``locale.name``で取得できます。
+
+.. Templates also have the global function call _() available for string translation. The translate function has two forms:
+
+テンプレート内ではグローバル関数``_()``を翻訳に使うことができます。この関数は2通りの使い方があります:
 
 .. code-block:: python
 
   _("Translate this string")
 
-which translates the string directly based on the current locale, and
+.. which translates the string directly based on the current locale, and
+
+この呼び方では文字列を現在のロケールに基づいて翻訳します。
+
 
 .. code-block:: python
 
   _("A person liked this", "%(num)d people liked this", len(people)) % {"num": len(people)}
 
-which translates a string that can be singular or plural based on the value of the third argument. In the example above, a translation of the first string will be returned if len(people) is 1, or a translation of the second string will be returned otherwise.
+.. which translates a string that can be singular or plural based on the value of the third argument. 
 
-The most common pattern for translations is to use Python named placeholders for variables (the %(num)d in the example above) since placeholders can move around on translation.
+この呼びかたでは、単数と複数で異なった形を取る文字列を第三引数の値に基づいて翻訳することができます。
 
-Here is a properly localized template:
+.. In the example above, a translation of the first string will be returned if len(people) is 1, or a translation of the second string will be returned otherwise.
+
+上記の例では``len(people)``が1の時には最初の文字列が返され、それ以外の場合には二番目の文字列が返されます。
+
+.. The most common pattern for translations is to use Python named placeholders for variables (the %(num)d in the example above) since placeholders can move around on translation.
+
+翻訳文で変数を使う場合はPythonの名前付きプレースホルダー(上記の例では``%(num)d``)を使うのが一般的です。
+これはプレースホルダーを翻訳文の好きな位置に置けるようにするためです。
+
+.. Here is a properly localized template:
+適切に他言語化されたテンプレートの例を下に示します:
 
 .. code-block:: html
 
@@ -402,7 +425,9 @@ Here is a properly localized template:
      </body>
    </html>
 
-By default, we detect the user's locale using the Accept-Language header sent by the user's browser. We choose en_US if we can't find an appropriate Accept-Language value. If you let user's set their locale as a preference, you can override this default locale selection by overriding get_user_locale in your request handler:
+.. By default, we detect the user's locale using the Accept-Language header sent by the user's browser. We choose en_US if we can't find an appropriate Accept-Language value. If you let user's set their locale as a preference, you can override this default locale selection by overriding get_user_locale in your request handler:
+
+デフォルトでは、ユーザのブラウザが送るAccept-Languageヘッダの値をユーザのロケールを判断します。適切な値のAccept-Languageヘッダが見つからない場合はen_USを使います。ユーザにロケールを設定させる場合は、リクエストハンドラの``get_user_locale``メソッドをオーバーライドすることでこの挙動を上書きできます。
 
 .. code-block:: python
 
@@ -418,9 +443,13 @@ By default, we detect the user's locale using the Accept-Language header sent by
               return None
           return self.current_user.prefs["locale"]
 
-If get_user_locale returns None, we fall back on the Accept-Language header.
+.. If get_user_locale returns None, we fall back on the Accept-Language header.
 
-You can load all the translations for your application using the tornado.locale.load_translations method. It takes in the name of the directory which should contain CSV files named after the locales whose translations they contain, e.g., es_GT.csv or fr_CA.csv. The method loads all the translations from those CSV files and infers the list of supported locales based on the presence of each CSV file. You typically call this method once in the main() method of your server:
+``get_user_locale``メソッドの返り値がNoneの場合には、Accept-Languageヘッダの値に基づいてロケールを決定します。
+
+.. You can load all the translations for your application using the tornado.locale.load_translations method. It takes in the name of the directory which should contain CSV files named after the locales whose translations they contain, e.g., es_GT.csv or fr_CA.csv. The method loads all the translations from those CSV files and infers the list of supported locales based on the presence of each CSV file. You typically call this method once in the main() method of your server:
+
+``tornado.locale.load_translations``メソッドで、すべての翻訳ファイルをロードすることができます。このメソッドは翻訳ファイルが入っているディレクトリ名を引数に取ります。翻訳ファイルはロケールの名前に基づいた名前(例: es_GT.csv, fr_CA.csv)のCSVファイルです。このメソッドはCVSファイルから翻訳文をロードし、各CVSファイルの有無を元にどのロケールがサポートされているかを決定します。通常はこのメソッドはmain()メソッドの中で一度だけ呼びます。
 
 .. code-block:: python
 
@@ -429,9 +458,14 @@ You can load all the translations for your application using the tornado.locale.
           os.path.join(os.path.dirname(__file__), "translations"))
       start_server()
 
-You can get the list of supported locales in your application with tornado.locale.get_supported_locales(). The user's locale is chosen to be the closest match based on the supported locales. For example, if the user's locale is es_GT, and the es locale is supported, self.locale will be es for that request. We fall back on en_US if no close match can be found.
+.. You can get the list of supported locales in your application with tornado.locale.get_supported_locales(). The user's locale is chosen to be the closest match based on the supported locales. For example, if the user's locale is es_GT, and the es locale is supported, self.locale will be es for that request. We fall back on en_US if no close match can be found.
 
-See the locale module documentation for detailed information on the CSV format and other localization methods.
+サポートされているロケールの一覧は``tornado.locale.get_supported_locales()``で取得できます。ユーザのロケールは、サポートされているロケールの中で最も近いものが選ばれます。例えばユーザのロケールがes_GTで、esロケールがサポートされている場合、そのリクエストのself.localeはesになります。近い名前が見つからない場合はen_USになります。
+
+.. See the locale module documentation for detailed information on the CSV format and other localization methods.
+
+CSVファイルのフォーマットや他の他言語化の方法についての詳細は``locale``モジュールのドキュメントを参照してください。
+
 
 .. UI modules
 
