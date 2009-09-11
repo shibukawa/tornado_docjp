@@ -36,7 +36,7 @@ Tornadoは `Facebookのオープンソース技術 <http://developers.facebook.c
 
 .. This web site and all documentation is licensed under Creative Commons 3.0.
 
-このウェブサイトと、すべてのドキュメントは `Creative Commons 3.0 <http://creativecommons.org/licenses/by/3.0/>` のライセンスの元に公開されています。
+このウェブサイトと、すべてのドキュメントは `Creative Commons 3.0 <http://creativecommons.org/licenses/by/3.0/>`_ のライセンスの元に公開されています。
 
 翻訳について
 ============
