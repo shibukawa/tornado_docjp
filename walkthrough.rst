@@ -180,7 +180,9 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
 クッキーと、安全なクッキー
 --------------------------
 
-You can set cookies in the user's browser with the set_cookie method:
+.. You can set cookies in the user's browser with the set_cookie method:
+
+ユーザのブラウザにクッキーを残したい場合は :meth:`set_cookie()` メソッドを用います:
 
 .. code-block:: python
 
@@ -192,8 +194,15 @@ You can set cookies in the user's browser with the set_cookie method:
           else:
               self.write("Your cookie was set!")
 
-Cookies are easily forged by malicious clients. If you need to set cookies to, e.g., save the user ID of the currently logged in user, you need to sign your cookies to prevent forgery. Tornado supports this out of the box with the set_secure_cookie and get_secure_cookie methods. To use these methods, you need to specify a secret key named cookie_secret when you create your application. You can pass in application settings as keyword arguments to your application:
+.. Cookies are easily forged by malicious clients. If you need to set 
+   cookies to, e.g., save the user ID of the currently logged in user, 
+   you need to sign your cookies to prevent forgery. Tornado supports 
+   this out of the box with the set_secure_cookie and get_secure_cookie 
+   methods. To use these methods, you need to specify a secret key named 
+   cookie_secret when you create your application. You can pass in 
+   application settings as keyword arguments to your application:
 
+クッキーは悪意のあるクライアントによって容易に偽装されてしまいます。例えば現在ログインしているユーザのユーザIDを保存するためにクッキーをセットしたい場合は、偽造を防ぐためにあなたのクッキーを署名する必要があります。Tornadoではインストール直後でも :meth:`set_secure_cookie()` と :meth:`get_secure_cookie()` メソッドを用いることでこれを実現できます。これらのメソッドを用いるにはアプリケーションを構築する際に :data:`cookie_secret` という秘密鍵を指定する必要があります。これはアプリケーション設定内でキーワード引数としてアプリケーションに渡すことができます。
 
 .. code-block:: python
 
@@ -201,7 +210,12 @@ Cookies are easily forged by malicious clients. If you need to set cookies to, e
       (r"/", MainHandler),
   ], cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=")
 
-Signed cookies contain the encoded value of the cookie in addition to a timestamp and an HMAC signature. If the cookie is old or if the signature doesn't match, get_secure_cookie will return None just as if the cookie isn't set. The secure version of the example above:
+.. Signed cookies contain the encoded value of the cookie in addition to a 
+   timestamp and an HMAC signature. If the cookie is old or if the signature 
+   doesn't match, get_secure_cookie will return None just as if the cookie 
+   isn't set. The secure version of the example above:
+
+署名済みクッキーにはタイムスタンプと `HMAC署名 <http://en.wikipedia.org/wiki/HMAC>`_(`日本語 <http://ja.wikipedia.org/wiki/HMAC>`_) に加えてクッキーのエンコードされた値が含まれています。もしクッキーが古いあるいは署名が適合しなければ、 :meth:`get_secure_cookie()` メソッドがあたかもクッキーがセットされていないかのように ``None`` を返します。上記の例を安全なクッキーとして設定する場合は以下のようなコードになります。
 
 .. code-block:: python
 
@@ -218,9 +232,19 @@ Signed cookies contain the encoded value of the cookie in addition to a timestam
 ユーザ認証
 ----------
 
-The currently authenticated user is available in every request handler as self.current_user, and in every template as current_user. By default, current_user is None.
+.. The currently authenticated user is available in every request handler as 
+   self.current_user, and in every template as current_user. By default, 
+   current_user is None.
 
-To implement user authentication in your application, you need to override the get_current_user() method in your request handlers to determine the current user based on, e.g., the value of a cookie. Here is an example that lets users log into the application simply by specifying a nickname, which is then saved in a cookie:
+認証済みのユーザは、リクエストハンドラ内では  :attr:`self.current_user` として、テンプレート内では :data:`current_user` としてそれぞれ利用することができます。デフォルトでは :attr:`current_user` は ``None`` です。
+
+.. To implement user authentication in your application, you need to override 
+   the get_current_user() method in your request handlers to determine the 
+   current user based on, e.g., the value of a cookie. Here is an example 
+   that lets users log into the application simply by specifying a nickname, 
+   which is then saved in a cookie:
+
+アプリケーション内でユーザ認証を実装するには、例えばクッキーの値をもとにユーザを断定するには、リクエストハンドラ内で :meth:`get_current_user()` メソッドをオーバーライドする必要があります。下記の例では、ユーザがクッキー内に記録されているニックネームを用いてアプリケーションにログインする方法を示してします。
 
 .. code-block:: python
 
@@ -254,6 +278,8 @@ To implement user authentication in your application, you need to override the g
 
 You can require that the user be logged in using the Python decorator tornado.web.authenticated. If a request goes to a method with this decorator, and the user is not logged in, they will be redirected to login_url (another application setting). The example above could be rewritten:
 
+`Pythonデコレータ <http://www.python.org/dev/peps/pep-0318/>` の :func:`tornado.web.authenticated` を用いてログイン済みユーザのリクエストのみを処理するコードを書くことができます。もしリクエストがこのデコレータが付いたメソッドまで達したときにユーザがログインしていなかったら、リクエストは ``login_url`` にリダイレクトされます。（``login_url`` は別途アプリケーション設定を行います）上記サンプルは以下のように書き換えることができます:
+
 .. code-block:: python
 
   class MainHandler(BaseHandler):
@@ -272,9 +298,18 @@ You can require that the user be logged in using the Python decorator tornado.we
       (r"/login", LoginHandler),
   ], **settings)
 
-If you decorate post() methods with the authenticated decorator, and the user is not logged in, the server will send a 403 response.
+.. If you decorate post() methods with the authenticated decorator, and the 
+   user is not logged in, the server will send a 403 response.
 
-Tornado comes with built-in support for third-party authentication schemes like Google OAuth. See the auth module for more details. Check out the Tornado Blog example application for a complete example that uses authentication (and stores user data in a MySQL database).
+もし :meth:`post()` メソッドが :func:`authenticated` デコレータ付きで実装されていて、ユーザがログインしていなかった場合、サーバは ``403`` レスポンスを返します。
+
+
+.. Tornado comes with built-in support for third-party authentication 
+   schemes like Google OAuth. See the auth module for more details. 
+   Check out the Tornado Blog example application for a complete 
+   example that uses authentication (and stores user data in a MySQL database).
+
+TornadoはGoogle OAuthのようなサードパーティの認証方式もビルトインサポートしています。詳細は `auth module <http://github.com/facebook/tornado/blob/master/tornado/auth.py>` を参照して下さい。ユーザ認証を用いたアプリケーションの例を確認したい場合はTornadoブログをご覧ください。（なおMySQLにユーザデータを保存する例も記載されています。）
 
 .. Cross-site request forgery protection
 
