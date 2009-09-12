@@ -1,5 +1,9 @@
 .. Performance
 
+.. index::
+  single: パフォーマンス
+  single: 本番環境; 負荷テスト
+
 パフォーマンス
 ==============
 
@@ -21,8 +25,8 @@ Webアプリケーションのパフォーマンスというのは、フロン�
 
 私たちは、 "Hello, World"アプリケーションを、Pythonでもっとも人気のあるウェブフレームワーク(`Django <http://www.djangoproject.com/>`_, `web.py <http://webpy.org/>`_, `CherryPy <http://www.cherrypy.org/>`_)でそれぞれ実装し、いくつかの試験的な負荷テストを実行し、Tornadoとの相対的なパフォーマンスの基準値を測定しました。 Djangoとweb.pyにはApache/mod_wsgiを利用し、CherryPyはスタンドアロンサーバとして実行しました。それぞれのフレームワークごとに、私たちが良く本番環境として使用されると予想される環境を設定してあります。 Tornadoは、 `nginx <http://nginx.net/>`_ リバースプロキシを立てて、その後ろに4つのシングルスレッドのTornadoフロントエンドを走らせました。 私たちが推奨する構成としては、1つのコアごとに1つのフロントエンドを走らせて、前にnginxを立てる環境になります。今回の負荷テストでは4コアのマシンを利用しているため、4つとしました。
 
-.. We load tested each with Apache Benchmark (:program:`ab`) on the a separate machine 
-   with the command
+.. We load tested each with Apache Benchmark (:program:`ab`) on the a 
+   separate machine with the command
 
 Apacheベンチマーク(ab)を使用して、コマンドごとにそれぞれ別のマシンを使って負荷テストを行いました。
 
@@ -59,7 +63,7 @@ FriendFeedでは、 `nginx <http://nginx.net/>`_ をロードバランサーお�
 
 以下のファイルは、FriendFeedで使用されているのと、同じ構造を持つnginxの設定ファイルのひな形です。以下の設定ファイルは、nginxとTornadoサーバが同じマシン上にあり、4つのTornadoサーバが8000〜8003の4つのポートで動作することを想定しています。
 
-.. code-block:: text
+.. code-block:: nginx
 
   user nginx;
   worker_processes 1;
@@ -150,8 +154,6 @@ WSGIとGoogle AppEngine
    if you choose to use WSGI instead of Tornado's HTTP server. Some of 
    the features that are not available in WSGI applications: 
    @tornado.web.asynchronous, the httpclient module, and the auth module.
-
-
 
 Tornadoは、限定的に `WSGI <http://wsgi.org/>`_ をサポートしています。 しかし、WSGIではノンブロッキングのリクエストをサポートしていないため、TornadoのHTTPサーバではなくWSGIを使用することを選択してしまうと、Tornadoの非同期、ノンブロッキングの機能をアプリケーションで利用することはできなくなります。 :func:`@tornado.web.asynchronous`, :mod:`httpclient` モジュール, :mod:`auth` モジュールといったいくつかの機能は、WSGIアプリケーションでは利用できません。
 

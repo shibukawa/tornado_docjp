@@ -5,6 +5,20 @@ Tornadoウォークスルー
 
 .. Request handlers and request arguments
 
+.. index::
+   pair: メソッド; tornado.web.RequestHandler.get_argument()
+   pair: メソッド; tornado.web.RequestHandler.get()
+   pair: メソッド; tornado.web.RequestHandler.post()
+   pair: 設定; URLマッピング
+   pair: 例外; tornado.web.HTTPError
+   pair: 属性; tornado.web.RequestHandler.request
+   pair: 属性; tornado.web.HTTPRequest.arguments
+   pair: 属性; tornado.web.HTTPRequest.files
+   pair: 属性; tornado.web.HTTPRequest.path
+   pair: 属性; tornado.web.HTTPRequest.headers
+   single: リクエスト
+   pair: 実装; リクエストハンドラ
+
 リクエストハンドラと、リクエスト引数
 ------------------------------------
 
@@ -87,6 +101,14 @@ Tornadoウェブアプリケーションでは、URLあるいはURLパターン�
 
 .. Templates
 
+.. index::
+   pair: テンプレート関数; escape
+   pair: テンプレート関数; url_escape
+   pair: テンプレート関数; json_encode
+   single: テンプレート関数; 自作
+   single: テンプレート
+   pair: モジュール; tornado.template
+
 テンプレート
 ------------
 
@@ -141,7 +163,7 @@ Tornadoテンプレートは制御構造と表現をサポートします。制�
    block statements, which are described in detail in the documentation 
    for the template module.
 
-制御構造はほぼPythonでの表現に対応します。 ``if, for, while, try`` がサポートされていて、終了は{% end %}で宣言します。また、 ``extends`` や ``block`` 宣言によりテンプレートの継承も可能です。詳しくは `templateモジュール <http://github.com/facebook/tornado/blob/master/tornado/template.py>`_ のドキュメントを参照してください。
+制御構造はほぼPythonの制御構造の表現と対応しています。 ``if, for, while, try`` がサポートされていて、終了は{% end %}で宣言します。また、 ``extends`` や ``block`` 宣言によりテンプレートの継承も可能です。詳しくは `templateモジュール <http://github.com/facebook/tornado/blob/master/tornado/template.py>`_ のドキュメントを参照してください。
 
 .. Expressions can be any Python expression, including function calls. 
    We support the functions escape, url_escape, and json_encode by default, 
@@ -177,6 +199,11 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
 
 .. Cookies and secure cookies
 
+.. index::
+   pair: 実装; クッキー
+   pair: メソッド; tornado.web.RequestHandler.set_cookie()
+   pair: メソッド; tornado.web.RequestHandler.get_secure_cookie()
+
 クッキーと、安全なクッキー
 --------------------------
 
@@ -202,7 +229,7 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
    cookie_secret when you create your application. You can pass in 
    application settings as keyword arguments to your application:
 
-クッキーは悪意のあるクライアントによって容易に偽装されてしまいます。例えば現在ログインしているユーザのユーザIDを保存するためにクッキーをセットしたい場合は、偽造を防ぐためにあなたのクッキーを署名する必要があります。Tornadoではインストール直後でも :meth:`set_secure_cookie()` と :meth:`get_secure_cookie()` メソッドを用いることでこれを実現できます。これらのメソッドを用いるにはアプリケーションを構築する際に :data:`cookie_secret` という秘密鍵を指定する必要があります。これはアプリケーション設定内でキーワード引数としてアプリケーションに渡すことができます。
+クッキーは悪意のあるクライアントによって容易に偽装されてしまいます。例えば現在ログインしているユーザのユーザIDを保存するためにクッキーをセットしたい場合は、偽造を防ぐためにあなたのクッキーを署名する必要があります。Tornadoではインストール直後でも\ :meth:`set_secure_cookie()`\ と\ :meth:`get_secure_cookie()`\ メソッドを用いることでこれを実現できます。これらのメソッドを用いるにはアプリケーションを構築する際に\ :data:`cookie_secret`\ という秘密鍵を指定する必要があります。これはアプリケーション設定内でキーワード引数としてアプリケーションに渡すことができます。
 
 .. code-block:: python
 
@@ -228,6 +255,13 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
               self.write("Your cookie was set!")
 
 .. User authentication
+
+.. index::
+   pair: 実装; ユーザ認証
+   pair: デコレータ; tornado.web.authenticated
+   pair: 属性; tornado.web.RequestHandler.current_user
+   pair: テンプレート変数; current_user
+   pair: 設定; login_url
 
 ユーザ認証
 ----------
@@ -311,6 +345,14 @@ Tornadoのテンプレートエンジンによって、Tornadoテンプレート
 
 TornadoはGoogle OAuthのようなサードパーティの認証方式もビルトインサポートしています。詳細は\ `auth module <http://github.com/facebook/tornado/blob/master/tornado/auth.py>`_\ を参照して下さい。ユーザ認証を用いたアプリケーションの例を確認したい場合はTornadoブログをご覧ください。（なおMySQLにユーザデータを保存する例も記載されています。）
 
+.. index::
+   single: クロスサイトリクエストフォージェリ
+   single: XSRF
+   pair: クッキー; セキュリティ
+   pair: 設定; xsrf_cookies
+   pair: テンプレート関数; xsrf_from_html()
+   piar: 実装; XSRFからの保護
+
 .. Cross-site request forgery protection
 
 クロスサイトリクエストフォージェリからの保護
@@ -388,6 +430,12 @@ Tornadoは、XSRFプロテクション機能を持っています。アプリケ
 
 .. Static files and aggressive file caching
 
+.. index:: 
+   single: 静的ファイル
+   single: テンプレート関数; static_url()
+   single: 設定; static_path
+   single: nginx; 静的ファイル
+
 静的ファイルと積極的なファイルキャッシュ
 --------------------------------------
 
@@ -412,7 +460,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. This setting will automatically make all requests that start with /static/ serve from that static directory, e.g., http://localhost:8888/static/foo.png will serve the file foo.png from the specified static directory. We also automatically serve /robots.txt and /favicon.ico from the static directory (even though they don't start with the /static/ prefix).
 
-この設定では ``/static/`` で始まるすべてのリクエストを自動的に静的なディレクトリからの'serve'とすることができます。例えば ``http://localhost:8888/static/foo.png`` というURLの場合は :file:`foo.png` というファイルを指定された静的ディレクトリから提供します。また ``/robots.txt`` や ``/favicon.ico`` も静的ディレクトリから自動的に配信されます。（たとえURLが ``/static`` から始まらなくても）
+この設定では ``/static/`` で始まるすべてのリクエストを自動的に静的なディレクトリからの'serve'とすることができます。例えば :file:`http://localhost:8888/static/foo.png` というURLの場合は :file:`foo.png` というファイルを指定された静的ディレクトリから提供します。また :file:`/robots.txt` や :file:`/favicon.ico` も静的ディレクトリから自動的に配信されます。（たとえURLが :file:`/static` から始まらなくても）
 
 .. To improve performance, it is generally a good idea for browsers to cache static resources aggressively so browsers won't send unnecessary If-Modified-Since or Etag requests that might block the rendering of the page. Tornado supports this out of the box with static content versioning.
 
@@ -456,6 +504,15 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. Localization
 
+.. index::
+   pair: リクエストハンドラ; locale属性
+   pair: テンプレート変数; locale
+   pair: 関数; _()
+   pair: モジュール; tornado.locale
+   single: 多言語化
+   single: 翻訳
+   single: 実装; 翻訳
+
 多言語化
 --------
 
@@ -465,7 +522,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 ..  The name of the locale (e.g., en_US) is available as locale.name, and you can translate strings with the locale.translate method. 
 
-ロケールの名前(en_USなど)は :attr:`locale.name` で取得できます。
+ロケールの名前(en_USなど)は :attr:`locale.name` で取得できます。また、 :meth:`locale.translate` メソッドを使用することで翻訳を行うことができます。
 
 .. Templates also have the global function call _() available for string translation. The translate function has two forms:
 
@@ -478,7 +535,6 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 .. which translates the string directly based on the current locale, and
 
 この呼び方では文字列を現在のロケールに基づいて翻訳します。
-
 
 .. code-block:: python
 
@@ -536,7 +592,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. If get_user_locale returns None, we fall back on the Accept-Language header.
 
-:meth:`get_user_locale` メソッドの返り値がNoneの場合には、 ``Accept-Language`` ヘッダの値に基づいてロケールを決定します。
+:meth:`get_user_locale` メソッドの返り値が ``None`` の場合には、 ``Accept-Language`` ヘッダの値に基づいてロケールを決定します。
 
 .. You can load all the translations for your application using the tornado.locale.load_translations method. It takes in the name of the directory which should contain CSV files named after the locales whose translations they contain, e.g., es_GT.csv or fr_CA.csv. The method loads all the translations from those CSV files and infers the list of supported locales based on the presence of each CSV file. You typically call this method once in the main() method of your server:
 
@@ -558,6 +614,11 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 CSVファイルのフォーマットや他の他言語化の方法についての詳細は `localeモジュール <http://github.com/facebook/tornado/blob/master/tornado/locale.py>`_ のドキュメントを参照してください。
 
 .. UI modules
+
+.. index::
+   single: ユーザインタフェース
+   pair: 設定; ui_modules
+   pair: クラス; tornado.web.UIModule
 
 ユーザインタフェースモジュール
 ------------------------------
@@ -642,6 +703,12 @@ Tornadoにアプリケーションで ``ui_modules`` という設定を使って
 
 .. Non-blocking, asynchronous requests
 
+.. index::
+   pair: デコレータ; tornado.web.asynchronous
+   pair: メソッド; tornado.web.RequestHandler.async_callback
+   pair: ノンブロッキング; 実装
+   single: 非同期リクエスト
+
 ノンブロッキング, 非同期リクエスト
 ----------------------------------
 
@@ -695,6 +762,10 @@ Tornadoにアプリケーションで ``ui_modules`` という設定を使って
 
 .. Third party authentication
 
+.. index::
+   pair: 認証; サードパーティ
+   pair: モジュール; tornado.auth
+
 サードパーティ認証
 ------------------
 
@@ -706,7 +777,6 @@ Tornadoにアプリケーションで ``ui_modules`` という設定を使って
    a user's address book or publish a Twitter message on their behalf.
 
 Tornadoの認証モジュールは、いくつかのメジャーなWebサービスの認証と承認に対応しています。サービスは、Google/Gmail、Facebook、Twitter、Yahoo、FriendFeedが利用出来ます。このモジュールを使う事で、これらのサイトに、認証済みのアクセスを出来ます。例えばあなたのアドレスブックに載っている友達のTwitterのメッセージをダウンロードすることができます。
-
 
 .. Here is an example handler that uses Google for authentication, 
    saving the Google credentials in a cookie for later access:
