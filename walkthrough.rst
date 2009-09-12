@@ -351,7 +351,7 @@ TornadoはGoogle OAuthのようなサードパーティの認証方式もビル�
    pair: クッキー; セキュリティ
    pair: 設定; xsrf_cookies
    pair: テンプレート関数; xsrf_from_html()
-   piar: 実装; XSRFからの保護
+   pair: 実装; XSRFからの保護
 
 .. Cross-site request forgery protection
 
@@ -437,7 +437,7 @@ Tornadoは、XSRFプロテクション機能を持っています。アプリケ
    single: nginx; 静的ファイル
 
 静的ファイルと積極的なファイルキャッシュ
---------------------------------------
+---------------------------------------------
 
 .. You can serve static files from Tornado by specifying the static_path 
    setting in your application:
@@ -508,6 +508,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
    pair: リクエストハンドラ; locale属性
    pair: テンプレート変数; locale
    pair: 関数; _()
+   pair: 関数; tornado.locale.get_supported_locales()
    pair: モジュール; tornado.locale
    single: 多言語化
    single: 翻訳
@@ -607,7 +608,7 @@ Tornadoで静的ファイルを提供するにはアプリケーション設定�
 
 .. You can get the list of supported locales in your application with tornado.locale.get_supported_locales(). The user's locale is chosen to be the closest match based on the supported locales. For example, if the user's locale is es_GT, and the es locale is supported, self.locale will be es for that request. We fall back on en_US if no close match can be found.
 
-サポートされているロケールの一覧は :meth:`tornado.locale.get_supported_locales()` で取得できます。ユーザのロケールは、サポートされているロケールの中で最も近いものが選ばれます。例えばユーザのロケールが ``es_GT`` で、 ``es`` ロケールがサポートされている場合、そのリクエストの :attr:`self.locale` は ``es`` になります。近い名前が見つからない場合は ``en_US`` になります。
+サポートされているロケールの一覧は :func:`tornado.locale.get_supported_locales()` で取得できます。ユーザのロケールは、サポートされているロケールの中で最も近いものが選ばれます。例えばユーザのロケールが ``es_GT`` で、 ``es`` ロケールがサポートされている場合、そのリクエストの :attr:`self.locale` は ``es`` になります。近い名前が見つからない場合は ``en_US`` になります。
 
 .. See the locale module documentation for detailed information on the CSV format and other localization methods.
 
@@ -629,7 +630,7 @@ Tornadoではアプリケーション全体で標準的で再利用可能なユ�
 
 .. For example, if you are implementing a blog, and you want to have blog entries appear on both the blog home page and on each blog entry page, you can make an Entry module to render them on both pages. First, create a Python module for your UI modules, e.g., uimodules.py:
 
-たとえばあなたがブログを実装しているとして、ブログエントリがブログのホームページとそれぞれのエントリページの両方に表示されるようにしたいときに、 :mod:`Entry` モジュールを両方のページをレンダリングするように実装することができます。まず、あなたのユーザインタフェースモジュールに :file:`uimodules.py` のようなPythonモジュールを作成します:
+たとえばあなたがブログを実装しているとして、ブログエントリがブログのホームページとそれぞれのエントリページの両方に表示されるようにしたいときに、\ :class:`Entry`\ モジュールを両方のページをレンダリングするように実装することができます。まず、あなたのユーザインタフェースモジュールに :file:`uimodules.py` のようなPythonモジュールを作成します:
 
 .. code-block:: python
 
@@ -640,7 +641,7 @@ Tornadoではアプリケーション全体で標準的で再利用可能なユ�
 
 .. Tell Tornado to use uimodules.py using the ui_modules setting in your application:
 
-Tornadoにアプリケーションで ``ui_modules`` という設定を使っている ``uimodules.py`` を利用するよう明記します:
+Tornadoにアプリケーションで\ ``ui_modules``\ という設定を使用して\ ``uimodules.py``\ を利用するように設定します:
 
 .. code-block:: python
 
@@ -666,7 +667,7 @@ Tornadoにアプリケーションで ``ui_modules`` という設定を使って
 
 .. Within home.html, you reference the Entry module rather than printing the HTML directly:
 
-:file:`home.html` の中でHTMLを直接記述するのではなく、 :mod:`Entry` モジュールを参照します。
+:file:`home.html`\ の中でHTMLを直接記述するのではなく、\ :class:`Entry`\ モジュールを参照します。
 
 
 .. code-block:: django
@@ -677,7 +678,7 @@ Tornadoにアプリケーションで ``ui_modules`` という設定を使って
 
 .. Within entry.html, you reference the Entry module with the show_comments argument to show the expanded form of the entry:
 
-:file:`entry.html` の中でエントリの拡張されたフォームが表示されるように  :mod:`Entry` モジュールを ``show_comments`` 引数とともに参照します。
+:file:`entry.html`\ の中でエントリの拡張されたフォームが表示されるように\ :class:`Entry`\ モジュールを\ ``show_comments``\ 引数とともに参照します。
 
 .. code-block:: django
 
