@@ -2,6 +2,10 @@
 
 .. Overview
 
+.. index::
+   single: Tornade; 概要
+   single: Hello worldアプリケーション
+
 概要
 ====
 
@@ -11,7 +15,7 @@
    or Google's webapp, but with additional tools and optimizations to take 
    advantage of the non-blocking web server and tools.
 
-`FriendFeed <http://friendfeed.com/>`_ では、Pythonで書かれた、比較的シンプルで、ノンブロッキング実装のされたウェブサーバを使用しています。FriendFeedアプリケーションは、 `web.py <http://webpy.org/>`_ や、Googleの `webapp <http://code.google.com/appengine/docs/python/tools/webapp/>`_ に良く似たウェブのフレームワークを使用して書かれていますが、このノンブロッキングウェブサーバと周辺ツールを利用することによるアドバンテージを生かして、追加のツールや最適化が行われています。
+`FriendFeed <http://friendfeed.com/>`_\ では、Pythonで書かれた、比較的シンプルで、ノンブロッキング実装のされたウェブサーバを使用しています。FriendFeedアプリケーションは、\ `web.py <http://webpy.org/>`_\ や、Googleの\ `webapp <http://code.google.com/appengine/docs/python/tools/webapp/>`_\ に良く似たウェブのフレームワークを使用して書かれていますが、このノンブロッキングウェブサーバと周辺ツールを利用することによるアドバンテージを生かして、追加のツールや最適化が行われています。
 
 .. Tornado is an open source version of this web server and some of the tools 
    we use most often at FriendFeed. The framework is distinct from most 
@@ -25,7 +29,7 @@
    (For more information on scaling servers to support thousands of clients, 
    see The C10K problem.)
 
-`Tornade <http://github.com/facebook/tornado>`_ はこのウェブサーバと、私たちがFriendFeedで頻繁に使用しているツールのうちのいくつかを含んだ、オープンソースバージョンです。このフレームワークはノンブロッキングで、適切な速さを備えているということで、主流となっている、ほとんどのウェブサーバフレームワーク(特に、ほとんどのPythonのフレームワーク)とは異なっています。速さの理由としては、ノンブロッキングで、なおかつ `epoll <http://www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html>`_ を利用しているということがあげられ、その結果として数千のコネクションを同時に扱うことができます。これは、このフレームワークがリアルタイムのウェブサービスにとって理想的なものであるということを示しています。私たちは、主に、FriendFeedのリアルタイムで提供される機能をサポートするためにウェブサーバを開発しました。FrinedFeedのアクティブユーザは全員、FriendFeedに対してオープンなコネクションを常に張っています。数千のクライアントをサポートするためのサーバーのスケーリングの情報については、 `C10K問題 <http://www.kegel.com/c10k.html>`_ を参照してください。
+`Tornado <http://github.com/facebook/tornado>`_\ はこのウェブサーバと、私たちがFriendFeedで頻繁に使用しているツールのうちのいくつかを含んだ、オープンソースバージョンです。このフレームワークはノンブロッキングで、適切な速さを備えているということで、主流となっている、ほとんどのウェブサーバフレームワーク(特に、ほとんどのPythonのフレームワーク)とは異なっています。速さの理由としては、ノンブロッキングで、なおかつ\ `epoll <http://www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html>`_\ を利用しているということがあげられ、その結果として数千のコネクションを同時に扱うことができます。これは、このフレームワークがリアルタイムのウェブサービスにとって理想的なものであるということを示しています。私たちは、主に、FriendFeedのリアルタイムで提供される機能をサポートするためにウェブサーバを開発しました。FrinedFeedのアクティブユーザは全員、FriendFeedに対してオープンなコネクションを常に張っています。数千のクライアントをサポートするためのサーバーのスケーリングの情報については、\ `C10K問題 <http://www.kegel.com/c10k.html>`_\ を参照してください。
 
 .. Here is the canonical "Hello, world" example app:
 
@@ -63,6 +67,11 @@ tornado.web パッケージの詳細のウォークスルーについては、�
 
 .. Download
 
+.. index::
+   pair: ダウンロード; Tornado
+   pair: インストール; Tornado
+   pair: ソースコードブラウズ; Tornado
+
 ダウンロード
 ============
 
@@ -74,7 +83,7 @@ Tornadoの一番最新のバージョンGitHubからダウンロードします:
 
 .. You can also browse the source on GitHub. To install Tornado:
 
-GitHub上で `ソースコードをブラウズ <http://github.com/facebook/tornado>`_ することもできます。Tornadoをインストールするには以下のようにします:
+GitHub上で\ `ソースコードをブラウズ <http://github.com/facebook/tornado>`_\ することもできます。Tornadoをインストールするには以下のようにします:
 
 .. code-block:: bash
 
@@ -94,6 +103,9 @@ GitHub上で `ソースコードをブラウズ <http://github.com/facebook/torn
 
 .. Prerequisites
 
+.. index::
+   pair: インストール; 必要なもの
+
 Tornadoのインストールに必要なもの
 ---------------------------------
 
@@ -102,7 +114,7 @@ Tornadoのインストールに必要なもの
    simplejson installed. Complete installation instructions for Mac OS X 
    and Ubuntu are included below for convenience.
 
-TornadoはPython 2.5, 2.6でテストされています。Tornadoのすべての機能を使用するためには、 `PycURL <http://pycurl.sourceforge.net/>`_ と `simplejson <http://pypi.python.org/pypi/simplejson/>`_ などのJSONライブラリをインストールする必要があります。Mac OS XとUbuntuで必要なものを一括でインストールするには、以下のようにします。
+TornadoはPython 2.5, 2.6でテストされています。Tornadoのすべての機能を使用するためには、\ `PycURL <http://pycurl.sourceforge.net/>`_\ と\ `simplejson <http://pypi.python.org/pypi/simplejson/>`_\ などのJSONライブラリをインストールする必要があります。Mac OS XとUbuntuで必要なものを一括でインストールするには、以下のようにします。
 
 Mac OS X 10.5/10.6
 ~~~~~~~~~~~~~~~~~~

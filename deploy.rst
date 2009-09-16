@@ -3,6 +3,7 @@
 .. index::
   single: パフォーマンス
   single: 本番環境; 負荷テスト
+  single: nginx; パフォーマンス
 
 パフォーマンス
 ==============
@@ -23,7 +24,7 @@ Webアプリケーションのパフォーマンスというのは、フロン�
    running Tornado in production (our load test machine had four cores, and 
    we recommend 1 frontend per core).
 
-私たちは、 "Hello, World"アプリケーションを、Pythonでもっとも人気のあるウェブフレームワーク(`Django <http://www.djangoproject.com/>`_, `web.py <http://webpy.org/>`_, `CherryPy <http://www.cherrypy.org/>`_)でそれぞれ実装し、いくつかの試験的な負荷テストを実行し、Tornadoとの相対的なパフォーマンスの基準値を測定しました。 Djangoとweb.pyにはApache/mod_wsgiを利用し、CherryPyはスタンドアロンサーバとして実行しました。それぞれのフレームワークごとに、私たちが良く本番環境として使用されると予想される環境を設定してあります。 Tornadoは、 `nginx <http://nginx.net/>`_ リバースプロキシを立てて、その後ろに4つのシングルスレッドのTornadoフロントエンドを走らせました。 私たちが推奨する構成としては、1つのコアごとに1つのフロントエンドを走らせて、前にnginxを立てる環境になります。今回の負荷テストでは4コアのマシンを利用しているため、4つとしました。
+私たちは、 "Hello, World"アプリケーションを、Pythonでもっとも人気のあるウェブフレームワーク(`Django <http://www.djangoproject.com/>`_, `web.py <http://webpy.org/>`_, `CherryPy <http://www.cherrypy.org/>`_)でそれぞれ実装し、いくつかの試験的な負荷テストを実行し、Tornadoとの相対的なパフォーマンスの基準値を測定しました。Djangoとweb.pyにはApache/mod_wsgiを利用し、CherryPyはスタンドアロンサーバとして実行しました。それぞれのフレームワークごとに、私たちが良く本番環境として使用されると予想される環境を設定してあります。Tornadoは、\ `nginx <http://nginx.net/>`_\ リバースプロキシを立てて、その後ろに4つのシングルスレッドのTornadoフロントエンドを走らせました。私たちが推奨する構成としては、1つのコアごとに1つのフロントエンドを走らせて、前にnginxを立てる環境になります。今回の負荷テストでは4コアのマシンを利用しているため、4つとしました。
 
 .. We load tested each with Apache Benchmark (:program:`ab`) on the a 
    separate machine with the command
@@ -52,12 +53,16 @@ Apacheベンチマーク(ab)を使用して、コマンドごとにそれぞれ�
 
 .. _running_tornado_in_production:
 
+.. index::
+   pair: 本番環境; Tornado実行
+   pair: nginx; 設定
+
 本番環境でTornadoを実行する
 ============================
 
 .. At FriendFeed, we use nginx as a load balancer and static file server. We run multiple instances of the Tornado web server on multiple frontend machines. We typically run one Tornado frontend per core on the machine (sometimes more depending on utilization).
 
-FriendFeedでは、 `nginx <http://nginx.net/>`_ をロードバランサーおよび静的ファイルのサーバとして使用しています。 FriendFeedでは複数のフロントエンドマシン上で、いくつかのTornadoウェブサーバのインスタンスを起動しています。私たちが通常Tornadoフロントエンドを実行するのは、マシンのコア数と同数にしています。
+FriendFeedでは、\ `nginx <http://nginx.net/>`_\ をロードバランサーおよび静的ファイルのサーバとして使用しています。 FriendFeedでは複数のフロントエンドマシン上で、いくつかのTornadoウェブサーバのインスタンスを起動しています。私たちが通常Tornadoフロントエンドを実行するのは、マシンのコア数と同数にしています。
 
 .. This is a barebones nginx config file that is structurally similar to the one we use at FriendFeed. It assumes nginx and the Tornado servers are running on the same machine, and the four Tornado servers are running on ports 8000 - 8003:
 
@@ -145,6 +150,15 @@ FriendFeedでは、 `nginx <http://nginx.net/>`_ をロードバランサーお�
 
 .. WSGI and Google AppEngine
 
+.. index::
+   single: WSGI
+   single: Google AppEngine
+   pair: デコレータ; tornado.web.asynchronous
+   pair: クラス; tornado.web.WSGIApplication
+   pair: モジュール; tornado.auth
+   pair: モジュール; tornado.httpclient
+   pair: モジュール; wsgi
+
 WSGIとGoogle AppEngine
 =======================
 
@@ -155,14 +169,14 @@ WSGIとGoogle AppEngine
    the features that are not available in WSGI applications: 
    @tornado.web.asynchronous, the httpclient module, and the auth module.
 
-Tornadoは、限定的に `WSGI <http://wsgi.org/>`_ をサポートしています。 しかし、WSGIではノンブロッキングのリクエストをサポートしていないため、TornadoのHTTPサーバではなくWSGIを使用することを選択してしまうと、Tornadoの非同期、ノンブロッキングの機能をアプリケーションで利用することはできなくなります。 :func:`@tornado.web.asynchronous`, :mod:`httpclient` モジュール, :mod:`auth` モジュールといったいくつかの機能は、WSGIアプリケーションでは利用できません。
+Tornadoは、限定的に\ `WSGI <http://wsgi.org/>`_\ をサポートしています。 しかし、WSGIではノンブロッキングのリクエストをサポートしていないため、TornadoのHTTPサーバではなくWSGIを使用することを選択してしまうと、Tornadoの非同期、ノンブロッキングの機能をアプリケーションで利用することはできなくなります。\ :func:`@tornado.web.asynchronous`,\ :mod:`httpclient`\ モジュール,\ :mod:`auth`\ モジュールといったいくつかの機能は、WSGIアプリケーションでは利用できません。
 
 .. You can create a valid WSGI application from your Tornado request handlers 
    by using WSGIApplication in the wsgi module instead of using 
    tornado.web.Application. Here is an example that uses the built-in 
    WSGI CGIHandler to make a valid Google AppEngine application:
 
-通常Tornadoアプリケーションを作成するときにリクエストハンドラとして使用する、 :class:`tornado.web.Application` の代わりに、 :mod:`wsgi: モジュールの :class:`WSGIApplication` を使用すると有効なWSGIアプリケーションを作成することができます。以下のコードはPython組み込みのWSGIの :class:`CGIHandler` を使用するサンプルです。以下のコードは `Google AppEngine <http://code.google.com/appengine/>`_ のアプリケーションとして使用することができます:
+通常Tornadoアプリケーションを作成するときにリクエストハンドラとして使用する、\ :class:`tornado.web.Application`\ の代わりに、\ :mod:`wsgi`\ モジュールの\ :class:`WSGIApplication`\ を使用すると有効なWSGIアプリケーションを作成することができます。以下のコードはPython組み込みのWSGIの\ :class:`CGIHandler`\ を使用するサンプルです。以下のコードは\ `Google AppEngine <http://code.google.com/appengine/>`_\ のアプリケーションとして使用することができます:
 
 .. code-block:: python
 
@@ -182,18 +196,23 @@ Tornadoは、限定的に `WSGI <http://wsgi.org/>`_ をサポートしていま
 
 .. See the appengine example application for a full-featured AppEngine app built on Tornado.
 
-完全な機能を備えたAppEngineのTornadoアプリケーションについては、 :file:`appengine` のサンプルを参照してください。
+完全な機能を備えたAppEngineのTornadoアプリケーションについては、\ :file:`appengine`\ のサンプルを参照してください。
 
 .. Caveats and support
+
+.. index::
+   single: 警告
+   single: サポート
+   single: メーリングリスト
 
 警告とサポート
 ==============
 
 .. Tornado was refactored from the FriendFeed code base to reduce dependencies. This refactoring may have introduced bugs. Likewise, because the FriendFeed servers have always run behind nginx, Tornado has not been extensively tested with HTTP/1.1 clients beyond Firefox. Tornado currently does not attempt to handle multi-line headers and some types of malformed input.
 
-Tornadoは,  `FriendFeed <http://friendfeed.com/>`_ のコードをベースに、依存関係を減らすようにリファクタリングされたものです。このリファクタリングによってバグが混入された可能性があります。同様にFriendFeedのサーバはかならず :ref:`nginxを立てて <running_tornado_in_production>` 運用していたため、 Tornadoは Firefoxの HTTP/1.1クライアントでテストした以外は、十分にテストしてません。Tornadoは現在は複数行にわたるヘッダや、異常な入力扱うのを好みません。
+Tornadoは, \ `FriendFeed <http://friendfeed.com/>`_\ のコードをベースに、依存関係を減らすようにリファクタリングされたものです。このリファクタリングによってバグが混入された可能性があります。同様にFriendFeedのサーバはかならず\ :ref:`nginxを立てて <running_tornado_in_production>`\ 運用していたため、TornadoはFirefoxのHTTP/1.1クライアントでテストした以外は、十分にテストされていません。Tornadoは現在は複数行にわたるヘッダや、異常な入力扱うのを好みません。
 
 .. You can discuss Tornado and report bugs on the Tornado developer mailing list.
 
-Tornadoについての議論や、バグの報告は `Tornadoの開発者メーリングリスト <http://groups.google.com/group/python-tornado>`_ 上でお願いします。
+Tornadoについての議論や、バグの報告は\ `Tornadoの開発者メーリングリスト <http://groups.google.com/group/python-tornado>`_\ 上でお願いします。
 

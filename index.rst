@@ -26,7 +26,6 @@ Tornadoドキュメント翻訳
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
 ライセンス

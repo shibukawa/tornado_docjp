@@ -122,7 +122,7 @@ Pythonがサポートしているあらゆるテンプレート言語を用い�
 .. A Tornado template is just HTML (or any other text-based format) with 
    Python control sequences and expressions embedded within the markup:
 
-TornadoテンプレートはPython制御構造と表現がマークアップによって組み込まれた単なるHTML（あるいは他のテキストベースフォーマット）です。
+Tornadoテンプレートは、マークアップ内にPythonの制御構造と式が組み込まれた単なるHTML（あるいは他のテキストベースフォーマット）です。
 
 .. code-block:: html
 
@@ -155,7 +155,7 @@ TornadoテンプレートはPython制御構造と表現がマークアップに�
    statements are surronded by {% and %}, e.g., {% if len(items) > 2 %}. 
    Expressions are surrounded by {{ and }}, e.g., {{ items[0] }}.
 
-Tornadoテンプレートは制御構造と表現をサポートします。制御構造は ``{%`` と ``%}`` で囲むことによって表されます。たとえば ``{% if len(item) > 2 %}`` のような形です。表現は ``{{`` と ``}}`` で囲むことによって表現します。たとえば ``{{ items[0] }}`` といった具合です。
+Tornadoテンプレートは制御構造と式をサポートします。制御構造は ``{%`` と ``%}`` で囲むことによって表されます。たとえば ``{% if len(item) > 2 %}`` のような形です。式は ``{{`` と ``}}`` で囲むことによって表現します。たとえば ``{{ items[0] }}`` といった具合です。
 
 .. Control statements more or less map exactly to Python statements. 
    We support if, for, while, and try, all of which are terminated with 
@@ -163,14 +163,14 @@ Tornadoテンプレートは制御構造と表現をサポートします。制�
    block statements, which are described in detail in the documentation 
    for the template module.
 
-制御構造はほぼPythonの制御構造の表現と対応しています。 ``if, for, while, try`` がサポートされていて、終了は{% end %}で宣言します。また、 ``extends`` や ``block`` 宣言によりテンプレートの継承も可能です。詳しくは `templateモジュール <http://github.com/facebook/tornado/blob/master/tornado/template.py>`_ のドキュメントを参照してください。
+制御構造はほぼPythonの制御構造の表現と対応しています。\ ``if, for, while, try``\ がサポートされていて、終了は\ ``{% end %}``\ で宣言します。また、\ ``extends``\ や\ ``block``\ 宣言によりテンプレートの継承も可能です。詳しくは\ `templateモジュール <http://github.com/facebook/tornado/blob/master/tornado/template.py>`_\ のドキュメントを参照してください。
 
 .. Expressions can be any Python expression, including function calls. 
    We support the functions escape, url_escape, and json_encode by default, 
    and you can pass other functions into the template simply by passing them 
    as keyword arguments to the template render function:
 
-表現はどのような関数呼び出しを含む、あらゆるPython表現が可能です。Tornadoではデフォルトで ``escape``, ``url_escape``, ``json_encode`` をサポートしており、さらに他の関数もテンプレートレンダリング関数にキーワード引数として渡すことで、テンプレート上で使用可能となります。
+式には関数呼び出しを含む、あらゆるPythonの式を書くことが可能です。Tornadoではデフォルトで ``escape``, ``url_escape``, ``json_encode`` をサポートしており、さらに他の関数もテンプレートレンダリング関数にキーワード引数として渡すことで、テンプレート上で使用可能となります。
 
 .. code-block:: python
 
@@ -195,7 +195,7 @@ Tornadoテンプレートは制御構造と表現をサポートします。制�
    Consequently, if you write random stuff inside of your template 
    expressions, you will get random Python errors when you execute the template.
 
-Tornadoのテンプレートエンジンによって、Tornadoテンプレートは直接Pythonに変換されます。テンプレートに書かれた表現は逐一Python関数としてコピーされます。 Tornadoのテンプレート言語は他のテンプレート言語とは異なりテンプレート上であらゆる表現が可能で、明確な意味で柔軟性を実現します。 逆にテンプレート上で書いた表現があらゆるPythonのエラーを引き起こす可能性があることに注意してください。
+Tornadoのテンプレートエンジンによって、Tornadoテンプレートは直接Pythonに変換されます。テンプレートに書かれた式は逐一Python関数としてコピーされます。 Tornadoのテンプレート言語は他のテンプレート言語とは異なりテンプレート上であらゆる式を書くことが可能で、明確な意味で柔軟性を実現します。 逆にその自由さがあるために、テンプレート上で書いた式があらゆるPythonのエラーを引き起こす可能性があることに注意してください。
 
 .. Cookies and secure cookies
 
