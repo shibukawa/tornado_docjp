@@ -79,7 +79,7 @@ tornado.web パッケージの詳細のウォークスルーについては、�
 
 Tornadoの一番最新のバージョンGitHubからダウンロードします:
 
-  `tornado-0.1.tar.gz <http://www.tornadoweb.org/static/tornado-0.1.tar.gz>`_
+  `tornado-0.2.tar.gz <http://www.tornadoweb.org/static/tornado-0.2.tar.gz>`_
 
 .. You can also browse the source on GitHub. To install Tornado:
 
@@ -87,8 +87,8 @@ GitHub上で\ `ソースコードをブラウズ <http://github.com/facebook/tor
 
 .. code-block:: bash
 
-  tar xvzf tornado-0.1.tar.gz
-  cd tornado-0.1
+  tar xvzf tornado-0.2.tar.gz
+  cd tornado-0.2
   python setup.py build
   sudo python setup.py install
 
